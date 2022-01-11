@@ -1,0 +1,9 @@
+# Default ignored files
+/.idea/workspace.xml
+
+*.iml
+.idea/*
+target
+
+#Inclusion of the project run configurations
+!.idea/runConfigurations*
