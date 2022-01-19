@@ -9,7 +9,7 @@ public class Building extends Tile {
 	private final BuildingType buildingType;
 	private final Resources activationCost;
 	private final boolean canBeActivated;
-	private final Resources revenue; //TODO see when to transfer
+	private final Resources revenue;
 
 	private Player owner;
 
@@ -46,14 +46,16 @@ public class Building extends Tile {
 			throw new IllegalStateException();
 
 		stackCount++;
+	}
 
-		//TODO
+	public boolean canBeActivated() {
+		return canBeActivated && owner.getResources().has(activationCost);
 	}
 
 	public void activate() {
 		checkOwner();
 
-		if (!canBeActivated)
+		if (!canBeActivated())
 			throw new IllegalStateException();
 
 		if (activationCount + 1 > stackCount)
@@ -62,5 +64,6 @@ public class Building extends Tile {
 		activationCount++;
 
 		owner.getResources().substract(activationCost);
+		revenue.copyTo(owner.getResources());
 	}
 }

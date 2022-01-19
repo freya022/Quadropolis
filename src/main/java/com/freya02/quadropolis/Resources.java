@@ -8,6 +8,13 @@ public class Resources {
 	private final IntegerProperty houses = new SimpleIntegerProperty();
 	private final IntegerProperty barrels = new SimpleIntegerProperty();
 
+	public Resources() {}
+
+	public Resources(int houses, int barrels) {
+		this.houses.set(houses);
+		this.barrels.set(barrels);
+	}
+
 	public int getHouses() {
 		return houses.get();
 	}
@@ -54,5 +61,10 @@ public class Resources {
 
 		setBarrels(getBarrels() - resources.getBarrels());
 		setHouses(getHouses() - resources.getHouses());
+	}
+
+	public boolean has(Resources resources) {
+		return getHouses() > resources.getHouses()
+				&& getBarrels() > resources.getBarrels();
 	}
 }
