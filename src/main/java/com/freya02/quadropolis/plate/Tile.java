@@ -1,5 +1,5 @@
 package com.freya02.quadropolis.plate;
 
-public class Tile {
+public abstract class Tile {
 
 }
