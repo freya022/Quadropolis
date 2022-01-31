@@ -17,6 +17,14 @@ public abstract class Plate {
 		tiles = new Tile[width * height];
 	}
 
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
 	@Nullable
 	public Tile get(int x, int y) {
 		return tiles[getCoordinates(x, y)];

@@ -7,11 +7,17 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.util.stream.IntStream;
+
 public class Player {
 	private final Resources resources = new Resources();
 	private final IntegerProperty score = new SimpleIntegerProperty();
 	private final StringProperty name = new SimpleStringProperty();
-	private final ObservableList<Architect> architects = FXCollections.observableArrayList();
+	private final ObservableList<Architect> architects = FXCollections.observableArrayList(
+			IntStream.rangeClosed(1, 4)
+					.mapToObj(Architect::new)
+					.toList()
+	);
 
 	public int getScore() {
 		return score.get();
