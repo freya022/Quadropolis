@@ -1,5 +1,6 @@
 package com.freya02.quadropolis;
 
+import com.freya02.quadropolis.plate.PlayerPlate;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -11,13 +12,21 @@ import java.util.stream.IntStream;
 
 public class Player {
 	private final Resources resources = new Resources();
+
 	private final IntegerProperty score = new SimpleIntegerProperty();
 	private final StringProperty name = new SimpleStringProperty();
+
 	private final ObservableList<Architect> architects = FXCollections.observableArrayList(
 			IntStream.rangeClosed(1, 4)
 					.mapToObj(Architect::new)
 					.toList()
 	);
+
+	private final PlayerPlate plate;
+
+	public Player(int plateWidth, int plateHeight) {
+		this.plate = new PlayerPlate(plateWidth, plateHeight);
+	}
 
 	public int getScore() {
 		return score.get();
@@ -41,5 +50,9 @@ public class Player {
 
 	public Resources getResources() {
 		return resources;
+	}
+
+	public PlayerPlate getPlate() {
+		return plate;
 	}
 }

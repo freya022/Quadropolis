@@ -20,7 +20,7 @@ public class Quadropolis {
 		globalPlate = new GlobalPlate(5, 5);
 		players = FXCollections.observableArrayList(
 				IntStream.range(0, numPlayers)
-						.mapToObj(i -> new Player())
+						.mapToObj(i -> new Player(4, 4))
 						.toList()
 		);
 	}

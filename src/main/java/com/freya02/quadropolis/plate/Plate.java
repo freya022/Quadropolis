@@ -1,5 +1,6 @@
 package com.freya02.quadropolis.plate;
 
+import com.freya02.quadropolis.TileCoordinates;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,7 +35,7 @@ public abstract class Plate {
 	 * May return the replaced Tile
 	 */
 	@Nullable
-	public Tile set(int x, int y, @NotNull Tile tile) {
+	public Tile set(int x, int y, @Nullable Tile tile) {
 		final Tile oldTile = tiles[getCoordinates(x, y)];
 
 		tiles[getCoordinates(x, y)] = tile;
@@ -49,5 +50,18 @@ public abstract class Plate {
 		if (y >= height) throw new IllegalArgumentException("Y >= height : %d >= %d".formatted(y, height));
 
 		return x + y * width;
+	}
+
+	@Nullable
+	public Tile get(@NotNull TileCoordinates tileCoordinates) {
+		return get(tileCoordinates.x(), tileCoordinates.y());
+	}
+
+	/**
+	 * May return the replaced Tile
+	 */
+	@Nullable
+	public Tile set(@NotNull TileCoordinates tileCoordinates, @Nullable Tile tile) {
+		return set(tileCoordinates.x(), tileCoordinates.y(), tile);
 	}
 }
