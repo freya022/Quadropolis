@@ -4,11 +4,26 @@ import com.freya02.quadropolis.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public class GlobalPlate extends Plate {
 	private final ObservableList<PlacedArchitect> placedArchitects = FXCollections.observableArrayList();
 
 	public GlobalPlate(int width, int height) {
 		super(width, height);
+
+		final ThreadLocalRandom random = ThreadLocalRandom.current();
+
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++) {
+				final BuildingType[] buildingTypes = BuildingType.values();
+
+				set(x, y, new Building(buildingTypes[random.nextInt(buildingTypes.length)],
+						new Resources(1, 1),
+						true,
+						new Resources(2, 2)));
+			}
+		}
 	}
 
 	public ObservableList<PlacedArchitect> getPlacedArchitects() {
@@ -42,7 +57,7 @@ public class GlobalPlate extends Plate {
 		return true;
 	}
 
-	public void claimBuilding(Player player, Architect architect, PlacedArchitectCoordinates architectCoordinates, TileCoordinates targetCoordinates) {
+	public Building claimBuilding(Player player, Architect architect, PlacedArchitectCoordinates architectCoordinates, TileCoordinates targetCoordinates) {
 		if (!canClaimBuilding(architect, architectCoordinates)) {
 			throw new IllegalStateException("Cannot claim building by placing an architect of reach %d at **architect** coordinates: %d, %d".formatted(architect.getReach(),
 					architectCoordinates.x(),
@@ -56,11 +71,13 @@ public class GlobalPlate extends Plate {
 		final Tile tile = this.set(tileCoordinates, new Urbanist());
 
 		if (tile instanceof Building building) {
-			player.getPlate().set(targetCoordinates, tile);
+			player.getPlate().addBuilding(targetCoordinates, building);
 
 			building.setOwner(player);
 
-			//TODO faut il donner des resources quand on prend une case ou seulement à l'activation ?
+			building.getRevenue().copyTo(player.getResources());
+
+			return building;
 		} else {
 			throw new IllegalStateException("Claimed a tile that wasn't a Building");
 		}

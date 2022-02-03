@@ -13,7 +13,7 @@ public class Building extends Tile {
 
 	private Player owner;
 
-	private int stackCount = 0;
+	private int stackCount = 1; //On possède 1 batiment quand on le détient
 	private int activationCount = 0;
 
 	public Building(BuildingType buildingType, Resources activationCost, boolean canBeActivated, Resources revenue) {
@@ -25,6 +25,14 @@ public class Building extends Tile {
 
 	public BuildingType getBuildingType() {
 		return buildingType;
+	}
+
+	public Resources getRevenue() {
+		return revenue;
+	}
+
+	public Resources getActivationCost() {
+		return activationCost;
 	}
 
 	public void setOwner(Player owner) {
