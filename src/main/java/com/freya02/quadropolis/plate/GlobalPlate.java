@@ -8,6 +8,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class GlobalPlate extends Plate {
 	private final ObservableList<PlacedArchitect> placedArchitects = FXCollections.observableArrayList();
+	private final Urbanist urbanist = new Urbanist();
 
 	public GlobalPlate(int width, int height) {
 		super(width, height);
@@ -68,7 +69,13 @@ public class GlobalPlate extends Plate {
 
 		final TileCoordinates tileCoordinates = architectCoordinates.toTileCoordinates(this, architect);
 
-		final Tile tile = this.set(tileCoordinates, new Urbanist());
+		//Try to remove urbanist from the plate
+		if (this.get(urbanist.getCoords()) instanceof Urbanist) {
+			this.set(urbanist.getCoords(), null);
+		}
+
+		final Tile tile = this.set(tileCoordinates, urbanist);
+		urbanist.setCoords(tileCoordinates);
 
 		if (tile instanceof Building building) {
 			player.getPlate().addBuilding(targetCoordinates, building);
@@ -76,6 +83,8 @@ public class GlobalPlate extends Plate {
 			building.setOwner(player);
 
 			building.getRevenue().copyTo(player.getResources());
+
+			player.getArchitects().remove(architect);
 
 			return building;
 		} else {
