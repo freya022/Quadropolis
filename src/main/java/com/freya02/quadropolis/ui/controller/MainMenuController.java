@@ -5,7 +5,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.stage.Stage;
 
+import java.awt.*;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 public class MainMenuController {
 	private final Stage stage;
@@ -32,6 +35,15 @@ public class MainMenuController {
 
 	@FXML
 	private void onRulesAction(ActionEvent event) {
-
+		if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+			try {
+				Desktop.getDesktop().browse(new URI("https://cdn.1j1ju.com/medias/84/80/76-quadropolis-regle.pdf"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (URISyntaxException e) {
+				e.printStackTrace();
+			}
+		}
 	}
+
 }
