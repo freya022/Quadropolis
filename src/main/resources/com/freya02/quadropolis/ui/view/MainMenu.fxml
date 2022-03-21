@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<AnchorPane prefHeight="421.0" prefWidth="512.0" stylesheets="@../css/MainMenu.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <ImageView fitHeight="427.0" fitWidth="653.0" layoutX="-2.0">
+            <image>
+                <Image url="@../media/wp.PNG" />
+            </image>
+        </ImageView>
+        <Label layoutX="194.0" layoutY="50.0" prefHeight="60.0" prefWidth="265.0" text="Quadropolis" textFill="#000305" wrapText="true">
+            <font>
+                <Font size="48.0" />
+            </font>
+        </Label>
+        <Button layoutX="233.0" layoutY="160.0" mnemonicParsing="false" onAction="#onNormalModeAction" prefHeight="42.0" prefWidth="181.0" text="Mode Normal" />
+        <Button layoutX="233.0" layoutY="291.0" mnemonicParsing="false" onAction="#onRulesAction" prefHeight="42.0" prefWidth="181.0" text="Règles du jeu" />
+        <Button layoutX="233.0" layoutY="226.0" mnemonicParsing="false" onAction="#onExpertModeAction" prefHeight="42.0" prefWidth="181.0" text="Mode Expert" />
+        <Label layoutX="490.0" layoutY="393.0" text="Projet 2ème année DUT" textFill="WHITE">
+         <font>
+            <Font size="14.0" />
+         </font></Label>
+    </children>
+</AnchorPane>

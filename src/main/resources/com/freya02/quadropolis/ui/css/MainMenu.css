@@ -1,0 +1,9 @@
+Button {
+    -fx-background-color: rgb(33, 150, 243);
+    -fx-font-size: 16px;
+}
+
+Button:hover {
+    -fx-background-color: rgb(55, 175, 255);
+    -fx-cursor: hand;
+}

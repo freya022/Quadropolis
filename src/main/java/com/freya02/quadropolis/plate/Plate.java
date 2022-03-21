@@ -1,12 +1,14 @@
 package com.freya02.quadropolis.plate;
 
 import com.freya02.quadropolis.TileCoordinates;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class Plate {
 	//2D flat array
-	private final Tile[] tiles;
+	private final ObservableList<Tile> tiles;
 
 	private final int width;
 	private final int height;
@@ -15,7 +17,15 @@ public abstract class Plate {
 		this.width = width;
 		this.height = height;
 
-		tiles = new Tile[width * height];
+		tiles = FXCollections.observableArrayList();
+
+		for (int i = 0; i < width * height; i++) {
+			tiles.add(null);
+		}
+	}
+
+	public ObservableList<Tile> getTiles() {
+		return tiles;
 	}
 
 	public int getWidth() {
@@ -28,7 +38,7 @@ public abstract class Plate {
 
 	@Nullable
 	public Tile get(int x, int y) {
-		return tiles[getCoordinates(x, y)];
+		return tiles.get(getCoordinates(x, y));
 	}
 
 	/**
@@ -36,9 +46,9 @@ public abstract class Plate {
 	 */
 	@Nullable
 	public Tile set(int x, int y, @Nullable Tile tile) {
-		final Tile oldTile = tiles[getCoordinates(x, y)];
+		final Tile oldTile = tiles.get(getCoordinates(x, y));
 
-		tiles[getCoordinates(x, y)] = tile;
+		tiles.set(getCoordinates(x, y), tile);
 
 		return oldTile;
 	}
