@@ -1,6 +1,7 @@
 package com.freya02.quadropolis.ui.controller;
 
-import com.freya02.quadropolis.GameManager;
+import com.freya02.quadropolis.Quadropolis;
+import com.freya02.quadropolis.ui.view.GlobalPlateView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Spinner;
@@ -21,14 +22,16 @@ public class PreGameController {
 	}
 
 	@FXML private void initialize() {
-		roundSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 4, 1));
-		playersSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 4, 1));
+		roundSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 4, 1));
+		playersSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 4, 1));
 	}
 
 	@FXML
 	private void onPlayAction(ActionEvent event) {
 		try {
-			new GameManager(roundSpinner.getValue(), playersSpinner.getValue());
+			Quadropolis.getInstance().initGame(playersSpinner.getValue());
+
+			new GlobalPlateView();
 
 			stage.close();
 		} catch (IOException e) {

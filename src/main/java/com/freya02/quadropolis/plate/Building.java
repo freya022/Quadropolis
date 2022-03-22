@@ -2,6 +2,11 @@ package com.freya02.quadropolis.plate;
 
 import com.freya02.quadropolis.Player;
 import com.freya02.quadropolis.Resources;
+import com.freya02.quadropolis.ui.view.BuildingView;
+import javafx.scene.Node;
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
 
 public class Building extends Tile {
 	public static final int MAX_STACK = 7;
@@ -73,5 +78,11 @@ public class Building extends Tile {
 
 		owner.getResources().substract(activationCost);
 		revenue.copyTo(owner.getResources());
+	}
+
+	@Override
+	@NotNull
+	public Node asGraphic() throws IOException {
+		return new BuildingView(this).getRoot();
 	}
 }

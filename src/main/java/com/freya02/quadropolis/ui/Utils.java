@@ -16,6 +16,17 @@ public class Utils {
 
 	@Contract("_, _ -> new")
 	@NotNull
+	public static <T> T loadRoot(String resourceName, Object controller) throws IOException {
+		final URL resource = WALKER.getCallerClass().getResource(resourceName);
+
+		final FXMLLoader loader = new FXMLLoader(resource);
+		loader.setController(controller);
+
+		return loader.load();
+	}
+
+	@Contract("_, _ -> new")
+	@NotNull
 	public static Scene loadScene(String resourceName, Object controller) throws IOException {
 		final URL resource = WALKER.getCallerClass().getResource(resourceName);
 

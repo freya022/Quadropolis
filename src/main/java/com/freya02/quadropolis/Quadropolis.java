@@ -12,6 +12,7 @@ public class Quadropolis {
 	private Resources gameResources;
 	private GlobalPlate globalPlate;
 	private ObservableList<Player> players;
+	private Player currentPlayer;
 
 	private Quadropolis() {}
 
@@ -23,6 +24,8 @@ public class Quadropolis {
 						.mapToObj(i -> new Player(4, 4))
 						.toList()
 		);
+
+		currentPlayer = players.get(0);
 	}
 
 	public static Quadropolis getInstance() {
