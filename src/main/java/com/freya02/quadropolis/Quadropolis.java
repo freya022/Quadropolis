@@ -20,8 +20,8 @@ public class Quadropolis {
 		gameResources = new Resources(Integer.MAX_VALUE, Integer.MAX_VALUE);
 		globalPlate = new GlobalPlate();
 		players = FXCollections.observableArrayList(
-				IntStream.range(0, numPlayers)
-						.mapToObj(i -> new Player())
+				IntStream.rangeClosed(1, numPlayers)
+						.mapToObj(Player::new)
 						.toList()
 		);
 
@@ -30,6 +30,10 @@ public class Quadropolis {
 
 	public static Quadropolis getInstance() {
 		return INSTANCE;
+	}
+
+	public Player getCurrentPlayer() {
+		return currentPlayer;
 	}
 
 	public GlobalPlate getGlobalPlate() {

@@ -2,6 +2,7 @@ package com.freya02.quadropolis.ui.controller;
 
 import com.freya02.quadropolis.Quadropolis;
 import com.freya02.quadropolis.ui.view.GlobalPlateView;
+import com.freya02.quadropolis.ui.view.PlayerPlateView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Spinner;
@@ -32,6 +33,8 @@ public class PreGameController {
 			Quadropolis.getInstance().initGame(playersSpinner.getValue());
 
 			new GlobalPlateView();
+
+			new PlayerPlateView().setPlayer(Quadropolis.getInstance().getCurrentPlayer());
 
 			stage.close();
 		} catch (IOException e) {

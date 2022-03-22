@@ -23,9 +23,15 @@ public class Player {
 	);
 
 	private final PlayerPlate plate;
+	private final int playerNum;
 
-	public Player() {
+	public Player(int playerNum) {
+		this.playerNum = playerNum;
 		this.plate = new PlayerPlate();
+	}
+
+	public int getPlayerNum() {
+		return playerNum;
 	}
 
 	public int getScore() {
