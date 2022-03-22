@@ -7,16 +7,19 @@ import javafx.collections.ObservableList;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class GlobalPlate extends Plate {
+	private static final int HEIGHT = 5;
+	private static final int WIDTH = 5;
+
 	private final ObservableList<PlacedArchitect> placedArchitects = FXCollections.observableArrayList();
 	private final Urbanist urbanist = new Urbanist();
 
-	public GlobalPlate(int width, int height) {
-		super(width, height);
+	public GlobalPlate() {
+		super(WIDTH, HEIGHT);
 
 		final ThreadLocalRandom random = ThreadLocalRandom.current();
 
-		for (int x = 0; x < width; x++) {
-			for (int y = 0; y < height; y++) {
+		for (int x = 0; x < WIDTH; x++) {
+			for (int y = 0; y < HEIGHT; y++) {
 				final BuildingType[] buildingTypes = BuildingType.values();
 
 				set(x, y, new Building(buildingTypes[random.nextInt(buildingTypes.length)],

@@ -14,7 +14,7 @@ public class PlateTest {
 
 	@BeforeAll
 	static void setUp() {
-		plate = new PlayerPlate(10, 10);
+		plate = new PlayerPlate();
 		tile = new Urbanist();
 	}
 

@@ -3,8 +3,11 @@ package com.freya02.quadropolis.plate;
 import com.freya02.quadropolis.TileCoordinates;
 
 public class PlayerPlate extends Plate {
-	public PlayerPlate(int width, int height) {
-		super(width, height);
+	private static final int WIDTH = 4;
+	private static final int HEIGHT = 4;
+
+	public PlayerPlate() {
+		super(WIDTH, HEIGHT);
 	}
 
 	public void addBuilding(TileCoordinates targetCoordinates, Building building) {

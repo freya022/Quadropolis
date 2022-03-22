@@ -24,8 +24,8 @@ public class Player {
 
 	private final PlayerPlate plate;
 
-	public Player(int plateWidth, int plateHeight) {
-		this.plate = new PlayerPlate(plateWidth, plateHeight);
+	public Player() {
+		this.plate = new PlayerPlate();
 	}
 
 	public int getScore() {

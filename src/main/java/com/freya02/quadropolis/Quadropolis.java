@@ -18,10 +18,10 @@ public class Quadropolis {
 
 	public void initGame(int numPlayers) {
 		gameResources = new Resources(Integer.MAX_VALUE, Integer.MAX_VALUE);
-		globalPlate = new GlobalPlate(5, 5);
+		globalPlate = new GlobalPlate();
 		players = FXCollections.observableArrayList(
 				IntStream.range(0, numPlayers)
-						.mapToObj(i -> new Player(4, 4))
+						.mapToObj(i -> new Player())
 						.toList()
 		);
 
