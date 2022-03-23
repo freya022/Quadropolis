@@ -51,10 +51,8 @@ public class MainMenuController {
 		if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
 			try {
 				Desktop.getDesktop().browse(new URI("https://github.com/freya022/Quadropolis/blob/master/Source"));
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (URISyntaxException e) {
-				e.printStackTrace();
+			} catch (Exception e) {
+				LOGGER.error("An error occurred after clicking the rules", e);
 			}
 		}
 	}

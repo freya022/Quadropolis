@@ -9,6 +9,7 @@ import javafx.beans.InvalidationListener;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -26,6 +27,7 @@ public class PlayerPlateController {
 	private final GameModel gameModel;
 	private final Player player;
 
+	@FXML private Label titleLabel;
 	@FXML private VBox vbox;
 	@FXML private HBox architectsBox;
 
@@ -36,6 +38,12 @@ public class PlayerPlateController {
 
 	@FXML
 	private void initialize() {
+		updateTitle();
+
+		gameModel.canSelectArchitectProperty().addListener(e -> updateTitle());
+		gameModel.canSelectArchitectCoordinatesProperty().addListener(e -> updateTitle());
+		gameModel.canSelectTargetTileProperty().addListener(e -> updateTitle());
+
 		player.getArchitects().addListener((InvalidationListener) observable -> updateArchitects());
 		player.getPlate().getTiles().addListener((InvalidationListener) observable -> updatePlate());
 
@@ -49,12 +57,31 @@ public class PlayerPlateController {
 
 				int finalX = x;
 				int finalY = y;
+
+				stackPane.disableProperty().bind(gameModel.canSelectTargetTileProperty().not());
 				stackPane.setOnMouseClicked(e -> onTileClick(finalX, finalY));
 			}
 		}
 	}
 
+	private void updateTitle() {
+		final String step;
+		if (gameModel.canSelectArchitectProperty().get()) {
+			step = "Sélectionnez un architecte";
+		} else if (gameModel.canSelectArchitectCoordinatesProperty().get()) {
+			step = "Positionnez l'architecte";
+		} else if (gameModel.canSelectTargetTileProperty().get()) {
+			step = "Sélectionnez votre case cible";
+		} else {
+			return;
+		}
+
+		titleLabel.setText("Plateau du joueur " + player.getPlayerNum() + " - " + step);
+	}
+
 	private void onTileClick(int x, int y) {
+		LOGGER.debug("Click player tile");
+
 		globalPlate.claimBuilding(gameModel.getCurrentPlayer(),
 				gameModel.getSelectedArchitect(),
 				gameModel.getSelectedArchitectCoordinates(),
@@ -70,6 +97,7 @@ public class PlayerPlateController {
 			view.setFitWidth(100);
 			view.setCursor(Cursor.HAND);
 
+			view.disableProperty().bind(gameModel.canSelectArchitectProperty().not());
 			view.setOnMouseClicked(e -> useArchitect(architect));
 
 			nodes.add(view);
@@ -79,6 +107,8 @@ public class PlayerPlateController {
 	}
 
 	private void useArchitect(Architect architect) {
+		LOGGER.debug("Chose player architect");
+
 		gameModel.setSelectedArchitect(architect);
 	}
 
