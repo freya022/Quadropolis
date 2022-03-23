@@ -29,6 +29,8 @@ public class GlobalPlateController {
 	public GlobalPlateController(GameModel gameModel, Stage stage) {
 		this.gameModel = gameModel;
 		this.stage = stage;
+
+		gameModel.currentPlayerProperty().addListener(x -> render());
 	}
 
 	@FXML
@@ -63,9 +65,9 @@ public class GlobalPlateController {
 		final int maxWidth = globalPlate.getWidth() + 2;
 		final int maxHeight = globalPlate.getHeight() + 2;
 
-		for (int x = 0; x < maxWidth; x++) {
-			for (int y = 0; y < maxHeight; y++) {
-				final StackPane stackPane = getOuterStackPane(x, y);
+		for (int largeX = 0; largeX < maxWidth; largeX++) {
+			for (int largeY = 0; largeY < maxHeight; largeY++) {
+				final StackPane stackPane = getOuterStackPane(largeX, largeY);
 
 				if (stackPane.getStyleClass().contains("architectSelectableTile")) {
 					final BooleanProperty canClaim = new SimpleBooleanProperty();
@@ -73,11 +75,7 @@ public class GlobalPlateController {
 					stackPane.setCursor(Cursor.HAND);
 					stackPane.disableProperty().bind(gameModel.canSelectArchitectCoordinatesProperty().not().or(canClaim.not()));
 
-					//TODO Copy translation mechanism of onArchitectTileClick to use in gameModel#selectedArchitect's listener
-					int finalX = Math.max(0, x - 1);
-					int finalY = Math.max(0, y - 1);
-
-					final PlacedArchitectCoordinates architectCoordinates = getArchitectCoordinates(finalX, finalY);
+					final PlacedArchitectCoordinates architectCoordinates = getArchitectCoordinates(largeX, largeY);
 
 					gameModel.selectedArchitectProperty().addListener((a, b, newArchitect) -> {
 						if (newArchitect == null) {
@@ -86,18 +84,7 @@ public class GlobalPlateController {
 							return;
 						}
 
-						final boolean canClaimTile;
-						if (finalX == 0) {
-							canClaimTile = globalPlate.canClaimBuilding(newArchitect, PlacedArchitectCoordinates.fromLeft(finalY));
-						} else if (finalX == maxWidth - 1) {
-							canClaimTile = globalPlate.canClaimBuilding(newArchitect, PlacedArchitectCoordinates.fromRight(finalY));
-						} else if (finalY == 0) {
-							canClaimTile = globalPlate.canClaimBuilding(newArchitect, PlacedArchitectCoordinates.fromTop(finalX));
-						} else if (finalY == maxHeight - 1) {
-							canClaimTile = globalPlate.canClaimBuilding(newArchitect, PlacedArchitectCoordinates.fromBottom(finalX));
-						} else {
-							throw new IllegalStateException("Unknown architect coordinates: " + finalX + "x" + finalY);
-						}
+						final boolean canClaimTile = globalPlate.canClaimBuilding(newArchitect, architectCoordinates);
 
 						canClaim.set(canClaimTile);
 					});
@@ -117,16 +104,18 @@ public class GlobalPlateController {
 
 	@NotNull
 	private PlacedArchitectCoordinates getArchitectCoordinates(int x, int y) {
+		//Ici on reçoit les coordonnées entre 0x0 et 7x7 (plateau + cases architectes), on doit réduire la coordonnée clé qu'à la transformation
+
 		PlacedArchitectCoordinates architectCoordinates;
 
 		if (x == 0) {
-			architectCoordinates = PlacedArchitectCoordinates.fromLeft(y);
+			architectCoordinates = PlacedArchitectCoordinates.fromLeft(Math.max(0, y - 1));
 		} else if (x == globalPlate.getWidth() + 1) {
-			architectCoordinates = PlacedArchitectCoordinates.fromRight(y);
+			architectCoordinates = PlacedArchitectCoordinates.fromRight(Math.max(0, y - 1));
 		} else if (y == 0) {
-			architectCoordinates = PlacedArchitectCoordinates.fromTop(x);
+			architectCoordinates = PlacedArchitectCoordinates.fromTop(Math.max(0, x - 1));
 		} else if (y == globalPlate.getHeight() + 1) {
-			architectCoordinates = PlacedArchitectCoordinates.fromBottom(x);
+			architectCoordinates = PlacedArchitectCoordinates.fromBottom(Math.max(0, x - 1));
 		} else {
 			throw new IllegalArgumentException("x = %d, y = %d".formatted(x, y));
 		}
@@ -138,7 +127,8 @@ public class GlobalPlateController {
 			for (int x = 0; x < globalPlate.getWidth(); x++) {
 				for (int y = 0; y < globalPlate.getHeight(); y++) {
 					final Tile tile = globalPlate.get(x, y);
-					if (tile == null) throw new IllegalStateException("Global plate not initialized");
+					if (tile == null)
+						throw new IllegalStateException("Global plate not initialized");
 
 					final StackPane stackPane = getStackPane(x, y);
 
