@@ -2,16 +2,17 @@ package com.freya02.quadropolis;
 
 import com.freya02.quadropolis.ui.view.MainMenuView;
 import javafx.application.Platform;
-
-import java.io.IOException;
+import org.slf4j.Logger;
 
 public class Main {
+	private static final Logger LOGGER = Logging.getLogger();
+
 	public static void main(String[] args) {
 		Platform.startup(() -> {
 			try {
 				new MainMenuView();
-			} catch (IOException e) {
-				e.printStackTrace();
+			} catch (Exception e) {
+				LOGGER.error("An error occurred while starting up", e);
 			}
 		});
 	}

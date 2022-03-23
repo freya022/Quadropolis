@@ -1,9 +1,6 @@
 package com.freya02.quadropolis.ui.controller;
 
-import com.freya02.quadropolis.Architect;
-import com.freya02.quadropolis.Player;
-import com.freya02.quadropolis.Quadropolis;
-import com.freya02.quadropolis.TileCoordinates;
+import com.freya02.quadropolis.*;
 import com.freya02.quadropolis.plate.GlobalPlate;
 import com.freya02.quadropolis.plate.PlayerPlate;
 import com.freya02.quadropolis.plate.Tile;
@@ -16,12 +13,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import org.slf4j.Logger;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerPlateController {
+	private static final Logger LOGGER = Logging.getLogger();
+
 	private final GlobalPlate globalPlate = Quadropolis.getInstance().getGlobalPlate();
 
 	private final GameModel gameModel;
@@ -97,8 +96,8 @@ public class PlayerPlateController {
 					stackPane.getChildren().setAll(tile.asGraphic());
 				}
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			LOGGER.error("An error occurred while rendering player plate", e);
 		}
 	}
 

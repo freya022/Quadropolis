@@ -1,5 +1,6 @@
 package com.freya02.quadropolis.ui.controller;
 
+import com.freya02.quadropolis.Logging;
 import com.freya02.quadropolis.PlacedArchitectCoordinates;
 import com.freya02.quadropolis.Quadropolis;
 import com.freya02.quadropolis.plate.GlobalPlate;
@@ -11,10 +12,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
-import java.io.IOException;
+import org.slf4j.Logger;
 
 public class GlobalPlateController {
+	private static final Logger LOGGER = Logging.getLogger();
 	private static final GlobalPlate globalPlate = Quadropolis.getInstance().getGlobalPlate();
 
 	private final GameModel gameModel;
@@ -107,8 +108,8 @@ public class GlobalPlateController {
 					stackPane.getChildren().setAll(tile.asGraphic());
 				}
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			LOGGER.error("An error occurred while rendering global plate", e);
 		}
 	}
 

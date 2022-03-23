@@ -1,5 +1,6 @@
 package com.freya02.quadropolis.ui.controller;
 
+import com.freya02.quadropolis.Logging;
 import com.freya02.quadropolis.Quadropolis;
 import com.freya02.quadropolis.ui.model.GameModel;
 import com.freya02.quadropolis.ui.view.GlobalPlateView;
@@ -9,11 +10,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.stage.Stage;
-
-import java.io.IOException;
+import org.slf4j.Logger;
 
 
 public class PreGameController {
+	private static final Logger LOGGER = Logging.getLogger();
+
 	@FXML private Spinner<Integer> roundSpinner;
 	@FXML private Spinner<Integer> playersSpinner;
 
@@ -40,8 +42,8 @@ public class PreGameController {
 			new PlayerPlateView(gameModel).setPlayer(Quadropolis.getInstance().getCurrentPlayer());
 
 			stage.close();
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			LOGGER.error("An error occurred while starting a game", e);
 		}
 	}
 }
