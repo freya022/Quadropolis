@@ -20,6 +20,7 @@
         <Button layoutX="233.0" layoutY="160.0" mnemonicParsing="false" onAction="#onNormalModeAction" prefHeight="42.0" prefWidth="181.0" text="Mode Normal" />
         <Button layoutX="233.0" layoutY="291.0" mnemonicParsing="false" onAction="#onRulesAction" prefHeight="42.0" prefWidth="181.0" text="Règles du jeu" />
         <Button layoutX="233.0" layoutY="226.0" mnemonicParsing="false" onAction="#onExpertModeAction" prefHeight="42.0" prefWidth="181.0" text="Mode Expert" />
+        <Button layoutX="14.0" layoutY="383.0" mnemonicParsing="false" onAction="#onSourceAction" prefHeight="31.0" prefWidth="107.0" text="Source" />
         <Label layoutX="490.0" layoutY="393.0" text="Projet 2ème année DUT" textFill="WHITE">
          <font>
             <Font size="14.0" />
