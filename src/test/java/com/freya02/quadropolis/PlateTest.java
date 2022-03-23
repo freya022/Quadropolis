@@ -22,7 +22,7 @@ public class PlateTest {
 	public void testGetValid() {
 		assertNull(plate.get(0, 0));
 		assertNull(plate.get(2, 2));
-		assertNull(plate.get(9, 9));
+		assertThrows(IllegalArgumentException.class, () -> plate.get(9, 9));
 	}
 
 	@Test
@@ -37,7 +37,7 @@ public class PlateTest {
 	public void testSetValid() {
 		assertNull(plate.set(0, 0, tile));
 		assertNull(plate.set(2, 2, tile));
-		assertNull(plate.set(9, 9, tile));
+		assertThrows(IllegalArgumentException.class, () -> plate.set(9, 9, tile));
 	}
 
 	@Test

@@ -25,7 +25,7 @@ public class BuildingTest {
 
 		building.setOwner(player);
 
-		for (int i = 0; i < 7; i++) {
+		for (int i = 0; i < 6; i++) {
 			assertDoesNotThrow(() -> building.stack());
 		}
 	}

@@ -75,8 +75,6 @@ public class GlobalPlate extends Plate {
 		//Try to remove urbanist from the plate
 		if (this.get(urbanist.getCoords()) instanceof Urbanist) {
 			this.set(urbanist.getCoords(), null);
-		} else {
-			System.out.println("No urbanist found");
 		}
 
 		final Tile tile = this.set(tileCoordinates, urbanist);

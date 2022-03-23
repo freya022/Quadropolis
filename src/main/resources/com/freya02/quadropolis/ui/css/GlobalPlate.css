@@ -1,0 +1,10 @@
+.visibleTile {
+    -fx-border-color: white;
+    -fx-border-radius: 3px;
+    -fx-border-width: 3px;
+}
+
+.back {
+    -fx-background-image: url("../media/background.png");
+    -fx-background-repeat: stretch;
+}

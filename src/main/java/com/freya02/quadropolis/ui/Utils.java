@@ -1,5 +1,6 @@
 package com.freya02.quadropolis.ui;
 
+import com.freya02.quadropolis.ui.view.BuildingController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -8,6 +9,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.function.Function;
 
@@ -63,5 +65,16 @@ public class Utils {
 		stage.show();
 
 		return new LoadedStage<>(stage, scene, controller);
+	}
+
+	@NotNull
+	public static InputStream getResourceAsStream(String url) {
+		final InputStream stream = BuildingController.class.getResourceAsStream(url);
+
+		if (stream == null) {
+			throw new IllegalArgumentException("Resource not found at: " + url);
+		}
+
+		return stream;
 	}
 }
