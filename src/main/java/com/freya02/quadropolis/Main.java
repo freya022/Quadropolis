@@ -8,6 +8,8 @@ public class Main {
 	private static final Logger LOGGER = Logging.getLogger();
 
 	public static void main(String[] args) {
+		Thread.setDefaultUncaughtExceptionHandler((t, e) -> LOGGER.error("An uncaught exception occurred", e));
+
 		Platform.startup(() -> {
 			try {
 				new MainMenuView();

@@ -18,7 +18,7 @@ public class PlayerPlateView {
 
 	private final Stage stage;
 
-	public PlayerPlateView(GameModel gameModel) throws IOException {
+	public PlayerPlateView(GameModel gameModel) {
 		this.gameModel = gameModel;
 
 		stage = Utils.newStage();
@@ -26,7 +26,9 @@ public class PlayerPlateView {
 		stage.show();
 	}
 
-	public void setPlayer(Player player) throws IOException {
+	public void setPlayer(Player player) {
+		gameModel.setCurrentPlayer(player);
+
 		final PlayerPlateScene playerPlateScene = playerMap.computeIfAbsent(player, x -> {
 			try {
 				final PlayerPlateController controller = new PlayerPlateController(gameModel, player);

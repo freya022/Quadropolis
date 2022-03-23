@@ -7,3 +7,5 @@ target
 
 #Inclusion of the project run configurations
 !.idea/runConfigurations*
+
+logs

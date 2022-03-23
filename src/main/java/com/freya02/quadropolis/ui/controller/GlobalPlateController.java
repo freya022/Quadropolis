@@ -60,6 +60,7 @@ public class GlobalPlateController {
 
 				if (stackPane.getStyleClass().contains("architectSelectableTile")) {
 					stackPane.setCursor(Cursor.HAND);
+					stackPane.disableProperty().bind(gameModel.canSelectArchitectCoordinatesProperty().not());
 
 					int finalX = x;
 					int finalY = y;
@@ -71,11 +72,9 @@ public class GlobalPlateController {
 		render();
 	}
 
-	private void onTileClick(int x, int y) {
-//		gameModel.setSelectedTile(new TileCoordinates(x, y));
-	}
-
 	private void onArchitectTileClick(int x, int y) {
+		LOGGER.debug("Click architect side tile");
+
 		PlacedArchitectCoordinates architectCoordinates;
 
 		if (x == 0) {
@@ -91,9 +90,6 @@ public class GlobalPlateController {
 		}
 
 		gameModel.setSelectedArchitectCoordinates(architectCoordinates);
-
-		//TODO when target tile is designated
-//
 	}
 
 	public void render() {

@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.*?>
-<VBox stylesheets="@../css/PlayerPlate.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<?import javafx.scene.text.Font?>
+<VBox alignment="TOP_CENTER" stylesheets="@../css/PlayerPlate.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <children>
+      <Label fx:id="titleLabel" text="Plateau joueur 0 - Etape">
+         <font>
+            <Font size="36.0" />
+         </font>
+      </Label>
       <VBox fx:id="vbox" prefHeight="200.0" prefWidth="100.0" spacing="10.0" stylesheets="@../css/GlobalPlate.css">
          <children>
             <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
@@ -73,4 +80,7 @@
       </VBox>
       <HBox id="architectsBox" fx:id="architectsBox" alignment="CENTER" spacing="10.0" />
    </children>
+   <padding>
+      <Insets top="10.0" />
+   </padding>
 </VBox>
