@@ -42,6 +42,7 @@ public class Utils {
 		final Stage stage = new Stage();
 		stage.setResizable(false);
 		stage.setTitle("Quadropolis");
+		stage.setOnCloseRequest(e -> System.exit(0));
 
 		return stage;
 	}

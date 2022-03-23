@@ -1,9 +1,12 @@
 package com.freya02.quadropolis.ui.controller;
 
+import com.freya02.quadropolis.PlacedArchitectCoordinates;
 import com.freya02.quadropolis.Quadropolis;
 import com.freya02.quadropolis.plate.GlobalPlate;
 import com.freya02.quadropolis.plate.Tile;
+import com.freya02.quadropolis.ui.model.GameModel;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -14,11 +17,13 @@ import java.io.IOException;
 public class GlobalPlateController {
 	private static final GlobalPlate globalPlate = Quadropolis.getInstance().getGlobalPlate();
 
-	@FXML private VBox vbox;
-
+	private final GameModel gameModel;
 	private final Stage stage;
 
-	public GlobalPlateController(Stage stage) {
+	@FXML private VBox vbox;
+
+	public GlobalPlateController(GameModel gameModel, Stage stage) {
+		this.gameModel = gameModel;
 		this.stage = stage;
 	}
 
@@ -30,20 +35,64 @@ public class GlobalPlateController {
 
 				int finalX = x;
 				int finalY = y;
-				stackPane.setOnMouseClicked(e -> onTileClick(finalX, finalY));
+
+				gameModel.selectedArchitectProperty().addListener((a, b, newArchitect) -> {
+					final boolean canClaimTile = globalPlate.canClaimBuilding(newArchitect, PlacedArchitectCoordinates.fromBottom(finalX))
+							|| globalPlate.canClaimBuilding(newArchitect, PlacedArchitectCoordinates.fromTop(finalX))
+							|| globalPlate.canClaimBuilding(newArchitect, PlacedArchitectCoordinates.fromLeft(finalY))
+							|| globalPlate.canClaimBuilding(newArchitect, PlacedArchitectCoordinates.fromRight(finalY));
+
+					stackPane.setDisable(!canClaimTile);
+				});
+			}
+		}
+
+		//Pour pouvoir sélectionner un endroit ou poser un architecte
+		// Case x = 0 avec 1 <= y <= height - 1
+		// Case y = 0 avec 1 <= x <= width - 1
+		final int maxWidth = globalPlate.getWidth() + 2;
+		final int maxHeight = globalPlate.getHeight() + 2;
+
+		for (int x = 0; x < maxWidth; x++) {
+			for (int y = 0; y < maxHeight; y++) {
+				final StackPane stackPane = getOuterStackPane(x, y);
+
+				if (stackPane.getStyleClass().contains("architectSelectableTile")) {
+					stackPane.setCursor(Cursor.HAND);
+
+					int finalX = x;
+					int finalY = y;
+					stackPane.setOnMouseClicked(e -> onArchitectTileClick(finalX, finalY));
+				}
 			}
 		}
 
 		render();
 	}
 
-	public void updatePanes() {
-
+	private void onTileClick(int x, int y) {
+//		gameModel.setSelectedTile(new TileCoordinates(x, y));
 	}
 
-	private void onTileClick(int x, int y) {
-		System.out.println("x = " + x);
-		System.out.println("y = " + y);
+	private void onArchitectTileClick(int x, int y) {
+		PlacedArchitectCoordinates architectCoordinates;
+
+		if (x == 0) {
+			architectCoordinates = PlacedArchitectCoordinates.fromLeft(y);
+		} else if (x == globalPlate.getWidth() + 1) {
+			architectCoordinates = PlacedArchitectCoordinates.fromRight(y);
+		} else if (y == 0) {
+			architectCoordinates = PlacedArchitectCoordinates.fromTop(x);
+		} else if (y == globalPlate.getHeight() + 1) {
+			architectCoordinates = PlacedArchitectCoordinates.fromBottom(x);
+		} else {
+			throw new IllegalArgumentException("x = %d, y = %d".formatted(x, y));
+		}
+
+		gameModel.setSelectedArchitectCoordinates(architectCoordinates);
+
+		//TODO when target tile is designated
+//
 	}
 
 	public void render() {
@@ -61,6 +110,12 @@ public class GlobalPlateController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private StackPane getOuterStackPane(int x, int y) {
+		//Offset by 1 because of hidden tiles on the UI to accommodate architects
+
+		return (StackPane) ((HBox) vbox.getChildren().get(y )).getChildren().get(x);
 	}
 
 	private StackPane getStackPane(int x, int y) {

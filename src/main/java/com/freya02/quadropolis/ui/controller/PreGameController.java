@@ -1,6 +1,7 @@
 package com.freya02.quadropolis.ui.controller;
 
 import com.freya02.quadropolis.Quadropolis;
+import com.freya02.quadropolis.ui.model.GameModel;
 import com.freya02.quadropolis.ui.view.GlobalPlateView;
 import com.freya02.quadropolis.ui.view.PlayerPlateView;
 import javafx.event.ActionEvent;
@@ -30,11 +31,13 @@ public class PreGameController {
 	@FXML
 	private void onPlayAction(ActionEvent event) {
 		try {
+			final GameModel gameModel = new GameModel();
+
 			Quadropolis.getInstance().initGame(playersSpinner.getValue());
 
-			new GlobalPlateView();
+			new GlobalPlateView(gameModel);
 
-			new PlayerPlateView().setPlayer(Quadropolis.getInstance().getCurrentPlayer());
+			new PlayerPlateView(gameModel).setPlayer(Quadropolis.getInstance().getCurrentPlayer());
 
 			stage.close();
 		} catch (IOException e) {
