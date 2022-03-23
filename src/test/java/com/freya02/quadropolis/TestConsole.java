@@ -4,10 +4,13 @@ import com.freya02.quadropolis.plate.Building;
 import com.freya02.quadropolis.plate.Tile;
 import com.freya02.quadropolis.plate.Urbanist;
 import javafx.collections.transformation.FilteredList;
+import org.slf4j.Logger;
 
 import java.util.Scanner;
 
 public class TestConsole {
+	private static final Logger LOGGER = Logging.getLogger();
+
 	public static void main(String[] args) {
 		final Quadropolis quadropolis = Quadropolis.getInstance();
 		quadropolis.initGame(4); //Jeu de 4 joueurs
@@ -75,7 +78,7 @@ public class TestConsole {
 
 				building.activate();
 			} catch (Exception e) {
-				e.printStackTrace();
+				LOGGER.error("An error occurred while testing", e);
 			}
 		}
 	}
