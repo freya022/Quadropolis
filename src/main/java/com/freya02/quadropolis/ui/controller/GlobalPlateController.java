@@ -54,6 +54,7 @@ public class GlobalPlateController {
 							|| globalPlate.canClaimBuilding(newArchitect, PlacedArchitectCoordinates.fromLeft(finalY))
 							|| globalPlate.canClaimBuilding(newArchitect, PlacedArchitectCoordinates.fromRight(finalY));
 
+					//TODO make it more apparent
 					stackPane.setDisable(!canClaimTile);
 				});
 			}
@@ -72,6 +73,7 @@ public class GlobalPlateController {
 				if (stackPane.getStyleClass().contains("architectSelectableTile")) {
 					final BooleanProperty canClaim = new SimpleBooleanProperty();
 
+					//TODO show a ghost architect icon when hovering
 					stackPane.setCursor(Cursor.HAND);
 					stackPane.disableProperty().bind(gameModel.canSelectArchitectCoordinatesProperty().not().or(canClaim.not()));
 
@@ -106,21 +108,17 @@ public class GlobalPlateController {
 	private PlacedArchitectCoordinates getArchitectCoordinates(int x, int y) {
 		//Ici on reçoit les coordonnées entre 0x0 et 7x7 (plateau + cases architectes), on doit réduire la coordonnée clé qu'à la transformation
 		// Donc on transforme soit le x ou le y, mais pas les deux en même temps
-
-		PlacedArchitectCoordinates architectCoordinates;
-
 		if (x == 0) {
-			architectCoordinates = PlacedArchitectCoordinates.fromLeft(Math.max(0, y - 1));
+			return PlacedArchitectCoordinates.fromLeft(Math.max(0, y - 1));
 		} else if (x == globalPlate.getWidth() + 1) {
-			architectCoordinates = PlacedArchitectCoordinates.fromRight(Math.max(0, y - 1));
+			return PlacedArchitectCoordinates.fromRight(Math.max(0, y - 1));
 		} else if (y == 0) {
-			architectCoordinates = PlacedArchitectCoordinates.fromTop(Math.max(0, x - 1));
+			return PlacedArchitectCoordinates.fromTop(Math.max(0, x - 1));
 		} else if (y == globalPlate.getHeight() + 1) {
-			architectCoordinates = PlacedArchitectCoordinates.fromBottom(Math.max(0, x - 1));
+			return PlacedArchitectCoordinates.fromBottom(Math.max(0, x - 1));
 		} else {
 			throw new IllegalArgumentException("x = %d, y = %d".formatted(x, y));
 		}
-		return architectCoordinates;
 	}
 
 	public void render() {

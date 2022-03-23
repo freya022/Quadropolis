@@ -5,7 +5,7 @@
 }
 
 .visibleTile:hover {
-    -fx-background-color: rgb(225, 225, 225);
+    -fx-background-color: rgba(35, 35, 35, 0.2);
 }
 
 .back {
