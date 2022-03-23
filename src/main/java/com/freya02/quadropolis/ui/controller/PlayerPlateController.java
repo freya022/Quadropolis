@@ -80,12 +80,19 @@ public class PlayerPlateController {
 	}
 
 	private void onTileClick(int x, int y) {
-		LOGGER.debug("Click player tile");
+		LOGGER.debug("Click player tile (final step)");
+		LOGGER.trace("Current player: {}", gameModel.getCurrentPlayer());
+		LOGGER.trace("Selected architect reach: {}", gameModel.getSelectedArchitect().getReach());
+		LOGGER.trace("Selected architect coordinates: {}", gameModel.getSelectedArchitectCoordinates());
+		LOGGER.trace("Target coordinates: {}", new TileCoordinates(x, y));
 
 		globalPlate.claimBuilding(gameModel.getCurrentPlayer(),
 				gameModel.getSelectedArchitect(),
 				gameModel.getSelectedArchitectCoordinates(),
 				new TileCoordinates(x, y));
+
+		//Next player
+		gameModel.nextPlayer();
 	}
 
 	private void updateArchitects() {

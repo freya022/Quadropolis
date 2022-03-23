@@ -17,7 +17,7 @@ public class Player {
 	private final StringProperty name = new SimpleStringProperty();
 
 	private final ObservableList<Architect> architects = FXCollections.observableArrayList(
-			IntStream.rangeClosed(1, 4)
+			IntStream.rangeClosed(0, 3)
 					.mapToObj(Architect::new)
 					.toList()
 	);
@@ -60,5 +60,10 @@ public class Player {
 
 	public PlayerPlate getPlate() {
 		return plate;
+	}
+
+	@Override
+	public String toString() {
+		return "Player{playerNum=%d}".formatted(playerNum);
 	}
 }

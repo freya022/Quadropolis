@@ -10,4 +10,8 @@ public class Architect {
 	public int getReach() {
 		return reach;
 	}
+
+	public int getVisualReach() {
+		return reach + 1;
+	}
 }

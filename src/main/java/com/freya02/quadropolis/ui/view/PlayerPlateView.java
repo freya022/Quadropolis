@@ -1,17 +1,21 @@
 package com.freya02.quadropolis.ui.view;
 
+import com.freya02.quadropolis.Logging;
 import com.freya02.quadropolis.Player;
 import com.freya02.quadropolis.ui.Utils;
 import com.freya02.quadropolis.ui.controller.PlayerPlateController;
 import com.freya02.quadropolis.ui.model.GameModel;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class PlayerPlateView {
+	private static final Logger LOGGER = Logging.getLogger();
+
 	private final GameModel gameModel;
 
 	private final Map<Player, PlayerPlateScene> playerMap = new HashMap<>();
@@ -21,13 +25,15 @@ public class PlayerPlateView {
 	public PlayerPlateView(GameModel gameModel) {
 		this.gameModel = gameModel;
 
+		gameModel.currentPlayerProperty().addListener((a, b, newPlayer) -> onPlayerChange(newPlayer));
+
 		stage = Utils.newStage();
 
 		stage.show();
 	}
 
-	public void setPlayer(Player player) {
-		gameModel.setCurrentPlayer(player);
+	private void onPlayerChange(Player player) {
+		LOGGER.debug("New player: {}", player);
 
 		final PlayerPlateScene playerPlateScene = playerMap.computeIfAbsent(player, x -> {
 			try {

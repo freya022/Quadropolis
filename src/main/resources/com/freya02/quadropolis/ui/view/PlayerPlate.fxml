@@ -6,7 +6,7 @@
 <?import javafx.scene.text.Font?>
 <VBox alignment="TOP_CENTER" stylesheets="@../css/PlayerPlate.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label fx:id="titleLabel" text="Plateau joueur 0 - Etape">
+      <Label fx:id="titleLabel" text="Plateau joueur 0 - Etape" textOverrun="CLIP" wrapText="true">
          <font>
             <Font size="36.0" />
          </font>

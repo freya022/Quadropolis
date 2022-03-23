@@ -1,20 +1,19 @@
 package com.freya02.quadropolis.ui.model;
 
-import com.freya02.quadropolis.Architect;
-import com.freya02.quadropolis.PlacedArchitectCoordinates;
-import com.freya02.quadropolis.Player;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import com.freya02.quadropolis.*;
+import javafx.beans.property.*;
+import org.slf4j.Logger;
 
 //Sélectionner architecte
 //Sélectionner côté et index du côté sur le plateau principal
 //Sélectionner la case cible de son propre plateau
 public class GameModel {
+	private static final Logger LOGGER = Logging.getLogger();
+
 	private final ObjectProperty<Architect> selectedArchitect = new SimpleObjectProperty<>();
 	private final ObjectProperty<PlacedArchitectCoordinates> selectedArchitectCoordinates = new SimpleObjectProperty<>();
 	private final ObjectProperty<Player> currentPlayer = new SimpleObjectProperty<>();
+	private final IntegerProperty turn = new SimpleIntegerProperty(1);
 
 	private final BooleanProperty canSelectArchitect = new SimpleBooleanProperty();
 	private final BooleanProperty canSelectArchitectCoordinates = new SimpleBooleanProperty();
@@ -72,5 +71,22 @@ public class GameModel {
 
 	public ObjectProperty<PlacedArchitectCoordinates> selectedArchitectCoordinatesProperty() {
 		return selectedArchitectCoordinates;
+	}
+
+	public void nextPlayer() {
+		LOGGER.debug("Next player");
+
+		selectedArchitect.set(null);
+		selectedArchitectCoordinates.set(null);
+
+		final Quadropolis quadropolis = Quadropolis.getInstance();
+		final int currentPlayerNum = getCurrentPlayer().getPlayerNum();
+		if (currentPlayerNum == quadropolis.getMaxPlayers()) {
+			turn.set(turn.get() + 1);
+
+			setCurrentPlayer(quadropolis.getPlayers().get(0));
+		} else {
+			setCurrentPlayer(quadropolis.getPlayers().get(currentPlayerNum)); //Le numéro du joueur est situé entre 1 et 4 ce qui veut dire qu'il pointe automatiquement vers le prochain
+		}
 	}
 }
