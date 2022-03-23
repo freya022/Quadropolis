@@ -105,6 +105,7 @@ public class GlobalPlateController {
 	@NotNull
 	private PlacedArchitectCoordinates getArchitectCoordinates(int x, int y) {
 		//Ici on reçoit les coordonnées entre 0x0 et 7x7 (plateau + cases architectes), on doit réduire la coordonnée clé qu'à la transformation
+		// Donc on transforme soit le x ou le y, mais pas les deux en même temps
 
 		PlacedArchitectCoordinates architectCoordinates;
 
@@ -127,10 +128,13 @@ public class GlobalPlateController {
 			for (int x = 0; x < globalPlate.getWidth(); x++) {
 				for (int y = 0; y < globalPlate.getHeight(); y++) {
 					final Tile tile = globalPlate.get(x, y);
-					if (tile == null)
-						throw new IllegalStateException("Global plate not initialized");
-
 					final StackPane stackPane = getStackPane(x, y);
+
+					if (tile == null) { //Intended behavior, tile got replace by urbanist and urbanist was moved
+						stackPane.getChildren().clear();
+
+						continue;
+					}
 
 					stackPane.getChildren().setAll(tile.asGraphic());
 				}
