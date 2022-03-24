@@ -1,11 +1,13 @@
 package com.freya02.quadropolis.ui.controller;
 
 import com.freya02.quadropolis.Logging;
+import com.freya02.quadropolis.PlacedArchitect;
 import com.freya02.quadropolis.PlacedArchitectCoordinates;
 import com.freya02.quadropolis.Quadropolis;
 import com.freya02.quadropolis.plate.GlobalPlate;
 import com.freya02.quadropolis.plate.Tile;
 import com.freya02.quadropolis.ui.model.GameModel;
+import javafx.beans.InvalidationListener;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -79,6 +81,8 @@ public class GlobalPlateController {
 				if (stackPane.getStyleClass().contains("architectSelectableTile")) {
 					final PlacedArchitectCoordinates architectCoordinates = getArchitectCoordinates(largeX, largeY);
 
+					globalPlate.getPlacedArchitects().addListener((InvalidationListener) x -> updatePlacedArchitect(stackPane, architectCoordinates));
+
 					final BooleanProperty canClaim = new SimpleBooleanProperty();
 
 					stackPane.setCursor(Cursor.HAND);
@@ -114,6 +118,19 @@ public class GlobalPlateController {
 		}
 
 		render();
+	}
+
+	private void updatePlacedArchitect(StackPane stackPane, PlacedArchitectCoordinates architectCoordinates) {
+		for (PlacedArchitect placedArchitect : globalPlate.getPlacedArchitects()) {
+			if (architectCoordinates.equals(placedArchitect.getCoordinates())) {
+				final ImageView view = new ImageView(placedArchitect.getArchitect().asImage());
+				view.setPreserveRatio(true);
+				view.setFitWidth(100);
+				view.setFitHeight(100);
+
+				stackPane.getChildren().setAll(view);
+			}
+		}
 	}
 
 	private void onArchitectTileClick(PlacedArchitectCoordinates architectCoordinates) {
