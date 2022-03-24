@@ -6,12 +6,15 @@ import com.freya02.quadropolis.Quadropolis;
 import com.freya02.quadropolis.plate.GlobalPlate;
 import com.freya02.quadropolis.plate.Tile;
 import com.freya02.quadropolis.ui.model.GameModel;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 public class GlobalPlateController {
@@ -26,6 +29,8 @@ public class GlobalPlateController {
 	public GlobalPlateController(GameModel gameModel, Stage stage) {
 		this.gameModel = gameModel;
 		this.stage = stage;
+
+		gameModel.currentPlayerProperty().addListener(x -> render());
 	}
 
 	@FXML
@@ -38,11 +43,18 @@ public class GlobalPlateController {
 				int finalY = y;
 
 				gameModel.selectedArchitectProperty().addListener((a, b, newArchitect) -> {
+					if (newArchitect == null) {
+						stackPane.setDisable(true); //Pas d'architecte sélectionné = pas de choix possible
+
+						return;
+					}
+
 					final boolean canClaimTile = globalPlate.canClaimBuilding(newArchitect, PlacedArchitectCoordinates.fromBottom(finalX))
 							|| globalPlate.canClaimBuilding(newArchitect, PlacedArchitectCoordinates.fromTop(finalX))
 							|| globalPlate.canClaimBuilding(newArchitect, PlacedArchitectCoordinates.fromLeft(finalY))
 							|| globalPlate.canClaimBuilding(newArchitect, PlacedArchitectCoordinates.fromRight(finalY));
 
+					//TODO make it more apparent
 					stackPane.setDisable(!canClaimTile);
 				});
 			}
@@ -54,17 +66,32 @@ public class GlobalPlateController {
 		final int maxWidth = globalPlate.getWidth() + 2;
 		final int maxHeight = globalPlate.getHeight() + 2;
 
-		for (int x = 0; x < maxWidth; x++) {
-			for (int y = 0; y < maxHeight; y++) {
-				final StackPane stackPane = getOuterStackPane(x, y);
+		for (int largeX = 0; largeX < maxWidth; largeX++) {
+			for (int largeY = 0; largeY < maxHeight; largeY++) {
+				final StackPane stackPane = getOuterStackPane(largeX, largeY);
 
 				if (stackPane.getStyleClass().contains("architectSelectableTile")) {
-					stackPane.setCursor(Cursor.HAND);
-					stackPane.disableProperty().bind(gameModel.canSelectArchitectCoordinatesProperty().not());
+					final BooleanProperty canClaim = new SimpleBooleanProperty();
 
-					int finalX = x;
-					int finalY = y;
-					stackPane.setOnMouseClicked(e -> onArchitectTileClick(finalX, finalY));
+					//TODO show a ghost architect icon when hovering
+					stackPane.setCursor(Cursor.HAND);
+					stackPane.disableProperty().bind(gameModel.canSelectArchitectCoordinatesProperty().not().or(canClaim.not()));
+
+					final PlacedArchitectCoordinates architectCoordinates = getArchitectCoordinates(largeX, largeY);
+
+					gameModel.selectedArchitectProperty().addListener((a, b, newArchitect) -> {
+						if (newArchitect == null) {
+							canClaim.set(false); //Pas d'architecte sélectionné = pas de choix possible
+
+							return;
+						}
+
+						final boolean canClaimTile = globalPlate.canClaimBuilding(newArchitect, architectCoordinates);
+
+						canClaim.set(canClaimTile);
+					});
+
+					stackPane.setOnMouseClicked(e -> onArchitectTileClick(architectCoordinates));
 				}
 			}
 		}
@@ -72,24 +99,26 @@ public class GlobalPlateController {
 		render();
 	}
 
-	private void onArchitectTileClick(int x, int y) {
-		LOGGER.debug("Click architect side tile");
+	private void onArchitectTileClick(PlacedArchitectCoordinates architectCoordinates) {
+		LOGGER.debug("Setting placed architected coordinates: {}", architectCoordinates);
+		gameModel.setSelectedArchitectCoordinates(architectCoordinates);
+	}
 
-		PlacedArchitectCoordinates architectCoordinates;
-
+	@NotNull
+	private PlacedArchitectCoordinates getArchitectCoordinates(int x, int y) {
+		//Ici on reçoit les coordonnées entre 0x0 et 7x7 (plateau + cases architectes), on doit réduire la coordonnée clé qu'à la transformation
+		// Donc on transforme soit le x ou le y, mais pas les deux en même temps
 		if (x == 0) {
-			architectCoordinates = PlacedArchitectCoordinates.fromLeft(y);
+			return PlacedArchitectCoordinates.fromLeft(Math.max(0, y - 1));
 		} else if (x == globalPlate.getWidth() + 1) {
-			architectCoordinates = PlacedArchitectCoordinates.fromRight(y);
+			return PlacedArchitectCoordinates.fromRight(Math.max(0, y - 1));
 		} else if (y == 0) {
-			architectCoordinates = PlacedArchitectCoordinates.fromTop(x);
+			return PlacedArchitectCoordinates.fromTop(Math.max(0, x - 1));
 		} else if (y == globalPlate.getHeight() + 1) {
-			architectCoordinates = PlacedArchitectCoordinates.fromBottom(x);
+			return PlacedArchitectCoordinates.fromBottom(Math.max(0, x - 1));
 		} else {
 			throw new IllegalArgumentException("x = %d, y = %d".formatted(x, y));
 		}
-
-		gameModel.setSelectedArchitectCoordinates(architectCoordinates);
 	}
 
 	public void render() {
@@ -97,9 +126,13 @@ public class GlobalPlateController {
 			for (int x = 0; x < globalPlate.getWidth(); x++) {
 				for (int y = 0; y < globalPlate.getHeight(); y++) {
 					final Tile tile = globalPlate.get(x, y);
-					if (tile == null) throw new IllegalStateException("Global plate not initialized");
-
 					final StackPane stackPane = getStackPane(x, y);
+
+					if (tile == null) { //Intended behavior, tile got replace by urbanist and urbanist was moved
+						stackPane.getChildren().clear();
+
+						continue;
+					}
 
 					stackPane.getChildren().setAll(tile.asGraphic());
 				}
@@ -112,7 +145,7 @@ public class GlobalPlateController {
 	private StackPane getOuterStackPane(int x, int y) {
 		//Offset by 1 because of hidden tiles on the UI to accommodate architects
 
-		return (StackPane) ((HBox) vbox.getChildren().get(y )).getChildren().get(x);
+		return (StackPane) ((HBox) vbox.getChildren().get(y)).getChildren().get(x);
 	}
 
 	private StackPane getStackPane(int x, int y) {

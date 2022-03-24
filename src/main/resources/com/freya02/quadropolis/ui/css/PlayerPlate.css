@@ -1,3 +1,14 @@
+.visibleTile {
+    -fx-border-color: white;
+    -fx-border-radius: 3px;
+    -fx-border-width: 3px;
+}
+
 .visibleTile:hover {
-    -fx-background-color: rgb(225, 225, 225);
+    -fx-background-color: rgba(35, 35, 35, 0.2);
+}
+
+.back {
+    -fx-background-image: url("../media/background.png");
+    -fx-background-repeat: stretch;
 }

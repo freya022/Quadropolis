@@ -27,7 +27,7 @@ public class PlayerPlateController {
 	private final GameModel gameModel;
 	private final Player player;
 
-	@FXML private Label titleLabel;
+	@FXML private Label titleLabel, stepLabel, houseLabel, barrelLabel;
 	@FXML private VBox vbox;
 	@FXML private HBox architectsBox;
 
@@ -46,6 +46,9 @@ public class PlayerPlateController {
 
 		player.getArchitects().addListener((InvalidationListener) observable -> updateArchitects());
 		player.getPlate().getTiles().addListener((InvalidationListener) observable -> updatePlate());
+
+		houseLabel.textProperty().bind(player.getResources().housesProperty().asString());
+		barrelLabel.textProperty().bind(player.getResources().barrelsProperty().asString());
 
 		updateArchitects();
 		updatePlate();
@@ -76,25 +79,34 @@ public class PlayerPlateController {
 			return;
 		}
 
-		titleLabel.setText("Plateau du joueur " + player.getPlayerNum() + " - " + step);
+		titleLabel.setText("Plateau du joueur " + player.getPlayerNum());
+		stepLabel.setText(step);
 	}
 
 	private void onTileClick(int x, int y) {
-		LOGGER.debug("Click player tile");
+		LOGGER.debug("Click player tile (final step)");
+		LOGGER.trace("Current player: {}", gameModel.getCurrentPlayer());
+		LOGGER.trace("Selected architect reach: {}", gameModel.getSelectedArchitect().getReach());
+		LOGGER.trace("Selected architect coordinates: {}", gameModel.getSelectedArchitectCoordinates());
+		LOGGER.trace("Target coordinates: {}", new TileCoordinates(x, y));
 
 		globalPlate.claimBuilding(gameModel.getCurrentPlayer(),
 				gameModel.getSelectedArchitect(),
 				gameModel.getSelectedArchitectCoordinates(),
 				new TileCoordinates(x, y));
+
+		//Next player
+		gameModel.nextPlayer();
 	}
 
 	private void updateArchitects() {
 		List<Node> nodes = new ArrayList<>();
 
 		for (Architect architect : player.getArchitects()) {
-			final ImageView view = new ImageView("https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Square_-_black_simple.svg/800px-Square_-_black_simple.svg.png");
+			final ImageView view = new ImageView(architect.asImage(player));
 			view.setFitHeight(100);
 			view.setFitWidth(100);
+			view.setPreserveRatio(true);
 			view.setCursor(Cursor.HAND);
 
 			view.disableProperty().bind(gameModel.canSelectArchitectProperty().not());
@@ -112,7 +124,7 @@ public class PlayerPlateController {
 		gameModel.setSelectedArchitect(architect);
 	}
 
-	public void updatePlate() {
+	private void updatePlate() {
 		try {
 			final PlayerPlate plate = player.getPlate();
 

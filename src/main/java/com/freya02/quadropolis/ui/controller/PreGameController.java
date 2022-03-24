@@ -27,7 +27,7 @@ public class PreGameController {
 
 	@FXML private void initialize() {
 		roundSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 4, 1));
-		playersSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 4, 1));
+		playersSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(2, 4, 1));
 	}
 
 	@FXML
@@ -39,7 +39,9 @@ public class PreGameController {
 
 			new GlobalPlateView(gameModel);
 
-			new PlayerPlateView(gameModel).setPlayer(Quadropolis.getInstance().getCurrentPlayer());
+			new PlayerPlateView(gameModel);
+
+			gameModel.setCurrentPlayer(Quadropolis.getInstance().getPlayers().get(0));
 
 			stage.close();
 		} catch (Exception e) {

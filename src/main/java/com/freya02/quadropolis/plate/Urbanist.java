@@ -1,8 +1,10 @@
 package com.freya02.quadropolis.plate;
 
 import com.freya02.quadropolis.TileCoordinates;
+import com.freya02.quadropolis.ui.Utils;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import org.jetbrains.annotations.NotNull;
 
 public class Urbanist extends Tile {
@@ -19,6 +21,11 @@ public class Urbanist extends Tile {
 	@Override
 	@NotNull
 	public Node asGraphic() {
-		return new Label("Urbanist");
+		final ImageView view = new ImageView(new Image(Utils.getResourceAsStream("/com/freya02/quadropolis/ui/media/urbanisteLogo.PNG")));
+		view.setFitHeight(100);
+		view.setFitWidth(100);
+		view.setPreserveRatio(true);
+
+		return view;
 	}
 }
