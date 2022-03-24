@@ -13,16 +13,30 @@ public class GameModel {
 	private final ObjectProperty<Architect> selectedArchitect = new SimpleObjectProperty<>();
 	private final ObjectProperty<PlacedArchitectCoordinates> selectedArchitectCoordinates = new SimpleObjectProperty<>();
 	private final ObjectProperty<Player> currentPlayer = new SimpleObjectProperty<>();
-	private final IntegerProperty turn = new SimpleIntegerProperty(1);
+	private final IntegerProperty round = new SimpleIntegerProperty(1);
 
 	private final BooleanProperty canSelectArchitect = new SimpleBooleanProperty();
 	private final BooleanProperty canSelectArchitectCoordinates = new SimpleBooleanProperty();
 	private final BooleanProperty canSelectTargetTile = new SimpleBooleanProperty();
 
-	public GameModel() {
+	private final int maxRounds;
+
+	public GameModel(int maxRounds, int maxPlayers) {
+		this.maxRounds = maxRounds;
+
+		Quadropolis.getInstance().initGame(maxPlayers);
+
 		canSelectArchitect.bind(selectedArchitect.isNull()); //Si l'architecte n'est pas sélectionné alors on peut le faire
 		canSelectArchitectCoordinates.bind(selectedArchitect.isNotNull().and(selectedArchitectCoordinates.isNull())); //Si l'architecte est sélectionné et que les coordonnées n'ont pas été sélectionnées
 		canSelectTargetTile.bind(selectedArchitect.isNotNull().and(selectedArchitectCoordinates.isNotNull())); //Si l'architecte et les coordonnées sont sélectionnées
+	}
+
+	public int getRound() {
+		return round.get();
+	}
+
+	public IntegerProperty roundProperty() {
+		return round;
 	}
 
 	public BooleanProperty canSelectArchitectProperty() {
@@ -82,7 +96,13 @@ public class GameModel {
 		final Quadropolis quadropolis = Quadropolis.getInstance();
 		final int currentPlayerNum = getCurrentPlayer().getPlayerNum();
 		if (currentPlayerNum == quadropolis.getMaxPlayers()) {
-			turn.set(turn.get() + 1);
+			if (round.get() == maxRounds) {
+				LOGGER.info("Jeu terminé");
+
+				System.exit(0);
+			}
+
+			round.set(round.get() + 1);
 
 			setCurrentPlayer(quadropolis.getPlayers().get(0));
 		} else {
