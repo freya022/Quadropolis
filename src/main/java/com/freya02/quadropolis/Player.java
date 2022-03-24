@@ -18,7 +18,7 @@ public class Player {
 
 	private final ObservableList<Architect> architects = FXCollections.observableArrayList(
 			IntStream.rangeClosed(0, 3)
-					.mapToObj(Architect::new)
+					.mapToObj(reach -> new Architect(this, reach))
 					.toList()
 	);
 

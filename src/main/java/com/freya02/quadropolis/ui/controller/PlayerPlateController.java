@@ -103,7 +103,7 @@ public class PlayerPlateController {
 		List<Node> nodes = new ArrayList<>();
 
 		for (Architect architect : player.getArchitects()) {
-			final ImageView view = new ImageView(architect.asImage(player));
+			final ImageView view = new ImageView(architect.asImage());
 			view.setFitHeight(100);
 			view.setFitWidth(100);
 			view.setPreserveRatio(true);

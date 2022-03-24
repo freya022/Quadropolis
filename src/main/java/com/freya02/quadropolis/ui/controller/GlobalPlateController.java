@@ -85,7 +85,7 @@ public class GlobalPlateController {
 					stackPane.disableProperty().bind(gameModel.canSelectArchitectCoordinatesProperty().not().or(canClaim.not()));
 					stackPane.hoverProperty().addListener((a, b, isHovering) -> {
 						if (isHovering && gameModel.getSelectedArchitect() != null) {
-							final ImageView view = new ImageView(gameModel.getSelectedArchitect().asImage(gameModel.getCurrentPlayer()));
+							final ImageView view = new ImageView(gameModel.getSelectedArchitect().asImage());
 							view.setPreserveRatio(true);
 							view.setFitWidth(100);
 							view.setFitHeight(100);
