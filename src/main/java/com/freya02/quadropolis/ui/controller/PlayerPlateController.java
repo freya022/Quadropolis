@@ -6,9 +6,11 @@ import com.freya02.quadropolis.plate.PlayerPlate;
 import com.freya02.quadropolis.plate.Tile;
 import com.freya02.quadropolis.ui.model.GameModel;
 import javafx.beans.InvalidationListener;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -30,6 +32,7 @@ public class PlayerPlateController {
 	@FXML private Label titleLabel, stepLabel, houseLabel, barrelLabel;
 	@FXML private VBox vbox;
 	@FXML private HBox architectsBox;
+	@FXML private Button nextPlayerButton;
 
 	public PlayerPlateController(GameModel gameModel, Player player) {
 		this.gameModel = gameModel;
@@ -39,6 +42,8 @@ public class PlayerPlateController {
 	@FXML
 	private void initialize() {
 		updateTitle();
+
+		nextPlayerButton.disableProperty().bind(gameModel.waitingNextTurnProperty().not());
 
 		gameModel.canSelectArchitectProperty().addListener(e -> updateTitle());
 		gameModel.canSelectArchitectCoordinatesProperty().addListener(e -> updateTitle());
@@ -69,7 +74,9 @@ public class PlayerPlateController {
 
 	private void updateTitle() {
 		final String step;
-		if (gameModel.canSelectArchitectProperty().get()) {
+		if (gameModel.isWaitingNextTurn()) {
+			step = "Attente du prochain tour";
+		} else if (gameModel.canSelectArchitectProperty().get()) {
 			step = "Sélectionnez un architecte";
 		} else if (gameModel.canSelectArchitectCoordinatesProperty().get()) {
 			step = "Positionnez l'architecte";
@@ -95,6 +102,11 @@ public class PlayerPlateController {
 				gameModel.getSelectedArchitectCoordinates(),
 				new TileCoordinates(x, y));
 
+		gameModel.prepareNextTurn();
+	}
+
+	@FXML
+	private void onNextPlayerAction(ActionEvent event) {
 		//Next player
 		gameModel.nextPlayer();
 	}

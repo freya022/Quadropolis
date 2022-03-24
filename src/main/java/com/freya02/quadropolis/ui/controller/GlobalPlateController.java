@@ -1,9 +1,6 @@
 package com.freya02.quadropolis.ui.controller;
 
-import com.freya02.quadropolis.Logging;
-import com.freya02.quadropolis.PlacedArchitect;
-import com.freya02.quadropolis.PlacedArchitectCoordinates;
-import com.freya02.quadropolis.Quadropolis;
+import com.freya02.quadropolis.*;
 import com.freya02.quadropolis.plate.GlobalPlate;
 import com.freya02.quadropolis.plate.Tile;
 import com.freya02.quadropolis.ui.model.GameModel;
@@ -95,8 +92,18 @@ public class GlobalPlateController {
 							view.setFitHeight(100);
 
 							stackPane.getChildren().setAll(view);
+
+							final TileCoordinates globalTarget = architectCoordinates.toTileCoordinates(globalPlate, gameModel.getSelectedArchitect());
+
+							final StackPane globalTargetPane = getStackPane(globalTarget.x(), globalTarget.y());
+							globalTargetPane.setOpacity(0.75);
 						} else {
 							stackPane.getChildren().clear();
+
+							final TileCoordinates globalTarget = architectCoordinates.toTileCoordinates(globalPlate, gameModel.getSelectedArchitect());
+
+							final StackPane globalTargetPane = getStackPane(globalTarget.x(), globalTarget.y());
+							globalTargetPane.setOpacity(1);
 						}
 					});
 
@@ -178,8 +185,6 @@ public class GlobalPlateController {
 	}
 
 	private StackPane getOuterStackPane(int x, int y) {
-		//Offset by 1 because of hidden tiles on the UI to accommodate architects
-
 		return (StackPane) ((HBox) vbox.getChildren().get(y)).getChildren().get(x);
 	}
 
