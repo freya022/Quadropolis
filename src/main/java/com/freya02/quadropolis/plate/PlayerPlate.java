@@ -1,13 +1,11 @@
 package com.freya02.quadropolis.plate;
 
+import com.freya02.quadropolis.GameMode;
 import com.freya02.quadropolis.TileCoordinates;
 
 public class PlayerPlate extends Plate {
-	private static final int WIDTH = 4;
-	private static final int HEIGHT = 4;
-
-	public PlayerPlate() {
-		super(WIDTH, HEIGHT);
+	public PlayerPlate(GameMode gameMode) {
+		super(gameMode.getPlayerPlateWidth(), gameMode.getPlayerPlateHeight());
 	}
 
 	public void addBuilding(TileCoordinates targetCoordinates, Building building) {

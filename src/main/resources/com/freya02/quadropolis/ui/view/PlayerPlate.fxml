@@ -87,7 +87,7 @@
       </VBox>
       <StackPane>
          <children>
-            <HBox id="architectsBox" fx:id="architectsBox" alignment="CENTER" spacing="10.0" />
+            <TilePane fx:id="architectsBox" hgap="10.0" prefColumns="3" vgap="10.0" />
             <VBox alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" StackPane.alignment="CENTER_RIGHT">
                <children>
                   <HBox alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" spacing="10.0">

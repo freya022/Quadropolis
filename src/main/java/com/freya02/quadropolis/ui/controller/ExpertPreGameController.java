@@ -32,7 +32,7 @@ public class ExpertPreGameController {
 	@FXML
 	private void onPlayAction(ActionEvent event) {
 		try {
-			final GameModel gameModel = new GameModel(GameMode.EXPERT, 4, playersSpinner.getValue());
+			final GameModel gameModel = new GameModel(GameMode.EXPERT, playersSpinner.getValue());
 
 			new GlobalPlateView(gameModel);
 

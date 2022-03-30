@@ -14,7 +14,7 @@ public class BuildingTest {
 
 	@BeforeAll
 	static void setUp() {
-		player = new Player(1);
+		player = new Player(GameMode.CLASSIC, 1);
 		building = new Building(BuildingType.PORT, new Resources(1, 0), true, new Resources(0, 1));
 	}
 

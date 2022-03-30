@@ -22,13 +22,11 @@ public class GameModel {
 	private final BooleanProperty canSelectTargetTile = new SimpleBooleanProperty();
 
 	private final GameMode gameMode;
-	private final int maxRounds;
 
-	public GameModel(GameMode gameMode, int maxRounds, int maxPlayers) {
+	public GameModel(GameMode gameMode, int maxPlayers) {
 		this.gameMode = gameMode;
-		this.maxRounds = maxRounds;
 
-		Quadropolis.getInstance().initGame(maxPlayers);
+		Quadropolis.getInstance().initGame(gameMode, maxPlayers);
 
 		canSelectArchitect.bind(waitingNextTurn.not().and(selectedArchitect.isNull())); //Si l'architecte n'est pas sélectionné alors on peut le faire
 		canSelectArchitectCoordinates.bind(waitingNextTurn.not().and(selectedArchitect.isNotNull().and(selectedArchitectCoordinates.isNull()))); //Si l'architecte est sélectionné et que les coordonnées n'ont pas été sélectionnées
@@ -109,7 +107,7 @@ public class GameModel {
 		final Quadropolis quadropolis = Quadropolis.getInstance();
 		final int currentPlayerNum = getCurrentPlayer().getPlayerNum();
 		if (currentPlayerNum == quadropolis.getMaxPlayers()) {
-			if (round.get() == maxRounds) {
+			if (round.get() == gameMode.getMaxRounds()) {
 				LOGGER.info("Jeu terminé");
 
 				System.exit(0);

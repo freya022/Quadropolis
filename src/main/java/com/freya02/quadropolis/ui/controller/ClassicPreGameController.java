@@ -32,7 +32,7 @@ public class ClassicPreGameController {
 	@FXML
 	private void onPlayAction(ActionEvent event) {
 		try {
-			final GameModel gameModel = new GameModel(GameMode.CLASSIC, 4, playersSpinner.getValue());
+			final GameModel gameModel = new GameModel(GameMode.CLASSIC, playersSpinner.getValue());
 
 			new GlobalPlateView(gameModel);
 

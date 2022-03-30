@@ -25,9 +25,9 @@ public class Player {
 	private final PlayerPlate plate;
 	private final int playerNum;
 
-	public Player(int playerNum) {
+	public Player(GameMode gameMode, int playerNum) {
 		this.playerNum = playerNum;
-		this.plate = new PlayerPlate();
+		this.plate = new PlayerPlate(gameMode);
 	}
 
 	public int getPlayerNum() {

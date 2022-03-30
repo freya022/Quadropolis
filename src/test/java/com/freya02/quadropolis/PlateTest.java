@@ -14,7 +14,7 @@ public class PlateTest {
 
 	@BeforeAll
 	static void setUp() {
-		plate = new PlayerPlate();
+		plate = new PlayerPlate(GameMode.CLASSIC);
 		tile = new Urbanist();
 	}
 
