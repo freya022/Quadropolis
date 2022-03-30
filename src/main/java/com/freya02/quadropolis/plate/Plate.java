@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Range;
 
 public abstract class Plate {
 	//2D flat array
@@ -41,6 +42,14 @@ public abstract class Plate {
 		return tiles.get(getCoordinates(x, y));
 	}
 
+	@Nullable
+	public Tile tryGet(int x, int y) {
+		final int coordinatesOrNegative = getCoordinatesOrNegative(x, y);
+		if (coordinatesOrNegative == -1) return null;
+
+		return tiles.get(coordinatesOrNegative);
+	}
+
 	/**
 	 * May return the replaced Tile
 	 */
@@ -58,6 +67,16 @@ public abstract class Plate {
 		if (y < 0) throw new IllegalArgumentException("Y < 0 : %d < 0".formatted(y));
 		if (x >= width) throw new IllegalArgumentException("X >= width : %d >= %d".formatted(x, width));
 		if (y >= height) throw new IllegalArgumentException("Y >= height : %d >= %d".formatted(y, height));
+
+		return x + y * width;
+	}
+
+	@Range(from = -1, to = Integer.MAX_VALUE)
+	private int getCoordinatesOrNegative(int x, int y) {
+		if (x < 0) return -1;
+		if (y < 0) return -1;
+		if (x >= width) return -1;
+		if (y >= height) return -1;
 
 		return x + y * width;
 	}

@@ -16,14 +16,14 @@ public class Quadropolis {
 
 	private Quadropolis() {}
 
-	public void initGame(int maxPlayers) {
+	public void initGame(GameMode gameMode, int maxPlayers) {
 		this.maxPlayers = maxPlayers;
 
 		gameResources = new Resources(Integer.MAX_VALUE, Integer.MAX_VALUE);
 		globalPlate = new GlobalPlate();
 		players = FXCollections.observableArrayList(
 				IntStream.rangeClosed(1, maxPlayers)
-						.mapToObj(Player::new)
+						.mapToObj(playerNum -> new Player(gameMode, playerNum))
 						.toList()
 		);
 	}

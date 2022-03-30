@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
 <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="10.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <children>
+      <Label text="Partie Expert">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
       <GridPane>
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -17,7 +22,7 @@
         </rowConstraints>
          <children>
             <Label text="Nombre rounds :" />
-            <Spinner fx:id="roundSpinner" GridPane.columnIndex="1" />
+            <Label text="5" GridPane.columnIndex="1" />
             <Label text="Nombre joueurs :" GridPane.rowIndex="1" />
             <Spinner fx:id="playersSpinner" GridPane.columnIndex="1" GridPane.rowIndex="1" />
          </children>

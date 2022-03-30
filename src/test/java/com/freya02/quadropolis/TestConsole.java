@@ -13,7 +13,7 @@ public class TestConsole {
 
 	public static void main(String[] args) {
 		final Quadropolis quadropolis = Quadropolis.getInstance();
-		quadropolis.initGame(4); //Jeu de 4 joueurs
+		quadropolis.initGame(GameMode.CLASSIC, 4); //Jeu de 4 joueurs
 
 //		tour1(quadropolis);
 //		tour2(quadropolis);
