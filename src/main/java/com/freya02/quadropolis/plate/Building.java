@@ -28,6 +28,22 @@ public class Building extends Tile {
 		this.revenue = revenue;
 	}
 
+	public int getStackCount() {
+		return stackCount;
+	}
+
+	public void setStackCount(int stackCount) {
+		this.stackCount = stackCount;
+	}
+
+	public int getActivationCount() {
+		return activationCount;
+	}
+
+	public void setActivationCount(int activationCount) {
+		this.activationCount = activationCount;
+	}
+
 	public BuildingType getBuildingType() {
 		return buildingType;
 	}
