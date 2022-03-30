@@ -1,5 +1,6 @@
 package com.freya02.quadropolis.ui.controller;
 
+import com.freya02.quadropolis.GameMode;
 import com.freya02.quadropolis.Logging;
 import com.freya02.quadropolis.Quadropolis;
 import com.freya02.quadropolis.ui.model.GameModel;
@@ -16,7 +17,6 @@ import org.slf4j.Logger;
 public class PreGameController {
 	private static final Logger LOGGER = Logging.getLogger();
 
-	@FXML private Spinner<Integer> roundSpinner;
 	@FXML private Spinner<Integer> playersSpinner;
 
 	private final Stage stage;
@@ -26,14 +26,13 @@ public class PreGameController {
 	}
 
 	@FXML private void initialize() {
-		roundSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 4, 1));
 		playersSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(2, 4, 1));
 	}
 
 	@FXML
 	private void onPlayAction(ActionEvent event) {
 		try {
-			final GameModel gameModel = new GameModel(roundSpinner.getValue(), playersSpinner.getValue());
+			final GameModel gameModel = new GameModel(GameMode.CLASSIC, 4, playersSpinner.getValue());
 
 			new GlobalPlateView(gameModel);
 

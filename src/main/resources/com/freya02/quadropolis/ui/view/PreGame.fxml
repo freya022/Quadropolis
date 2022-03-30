@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -17,7 +16,7 @@
         </rowConstraints>
          <children>
             <Label text="Nombre rounds :" />
-            <Spinner fx:id="roundSpinner" GridPane.columnIndex="1" />
+            <Label text="4" GridPane.columnIndex="1" />
             <Label text="Nombre joueurs :" GridPane.rowIndex="1" />
             <Spinner fx:id="playersSpinner" GridPane.columnIndex="1" GridPane.rowIndex="1" />
          </children>
