@@ -16,11 +16,7 @@ public class Player {
 	private final IntegerProperty score = new SimpleIntegerProperty();
 	private final StringProperty name = new SimpleStringProperty();
 
-	private final ObservableList<Architect> architects = FXCollections.observableArrayList(
-			IntStream.rangeClosed(0, 3)
-					.mapToObj(reach -> new Architect(this, reach))
-					.toList()
-	);
+	private final ObservableList<Architect> architects;
 
 	private final PlayerPlate plate;
 	private final int playerNum;
@@ -28,6 +24,12 @@ public class Player {
 	public Player(GameMode gameMode, int playerNum) {
 		this.playerNum = playerNum;
 		this.plate = new PlayerPlate(gameMode);
+
+		this.architects = FXCollections.observableArrayList(
+				IntStream.range(0, gameMode.getMaxArchitects())
+						.mapToObj(reach -> new Architect(this, gameMode, reach))
+						.toList()
+		);
 	}
 
 	public int getPlayerNum() {

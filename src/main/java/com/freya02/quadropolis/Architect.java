@@ -6,10 +6,12 @@ import org.jetbrains.annotations.NotNull;
 
 public class Architect {
 	private final Player player;
+	private final GameMode gameMode;
 	private final int reach;
 
-	public Architect(Player player, int reach) {
+	public Architect(Player player, GameMode gameMode, int reach) {
 		this.player = player;
+		this.gameMode = gameMode;
 		this.reach = reach;
 	}
 
@@ -23,7 +25,13 @@ public class Architect {
 
 	@NotNull
 	public Image asImage() {
-		final String url = "/com/freya02/quadropolis/ui/media/architects/architecte_%d_%d.PNG".formatted(player.getPlayerNum(), reach + 1); //Reach starts at 0, should start at 1 for the resource
+		final String url;
+
+		if (gameMode == GameMode.CLASSIC) {
+			url = "/com/freya02/quadropolis/ui/media/architects/architecte_%d_%d.PNG".formatted(player.getPlayerNum(), reach + 1); //Reach starts at 0, should start at 1 for the resource
+		} else {
+			url = "/com/freya02/quadropolis/ui/media/architects/architecte_expert_%d.PNG".formatted(reach + 1);
+		}
 
 		return new Image(Utils.getResourceAsStream(url));
 	}
