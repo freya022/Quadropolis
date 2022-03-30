@@ -14,14 +14,14 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 
 
-public class PreGameController {
+public class ClassicPreGameController {
 	private static final Logger LOGGER = Logging.getLogger();
 
 	@FXML private Spinner<Integer> playersSpinner;
 
 	private final Stage stage;
 
-	public PreGameController(Stage stage) {
+	public ClassicPreGameController(Stage stage) {
 		this.stage = stage;
 	}
 

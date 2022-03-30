@@ -1,7 +1,8 @@
 package com.freya02.quadropolis.ui.controller;
 
 import com.freya02.quadropolis.Logging;
-import com.freya02.quadropolis.ui.view.PreGameView;
+import com.freya02.quadropolis.ui.view.ClassicPreGameView;
+import com.freya02.quadropolis.ui.view.ExpertPreGameView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.stage.Stage;
@@ -21,13 +22,19 @@ public class MainMenuController {
 
 	@FXML
 	private void onExpertModeAction(ActionEvent event) {
+		try {
+			new ExpertPreGameView();
 
+			stage.close();
+		} catch (Exception e) {
+			LOGGER.error("An error occurred after clicking on normal mode", e);
+		}
 	}
 
 	@FXML
 	private void onNormalModeAction(ActionEvent event) {
 		try {
-			new PreGameView();
+			new ClassicPreGameView();
 
 			stage.close();
 		} catch (Exception e) {
