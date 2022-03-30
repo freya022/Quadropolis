@@ -13,16 +13,32 @@ public class GameModel {
 	private final ObjectProperty<Architect> selectedArchitect = new SimpleObjectProperty<>();
 	private final ObjectProperty<PlacedArchitectCoordinates> selectedArchitectCoordinates = new SimpleObjectProperty<>();
 	private final ObjectProperty<Player> currentPlayer = new SimpleObjectProperty<>();
-	private final IntegerProperty turn = new SimpleIntegerProperty(1);
+	private final IntegerProperty round = new SimpleIntegerProperty(1);
+
+	private final BooleanProperty waitingNextTurn = new SimpleBooleanProperty();
 
 	private final BooleanProperty canSelectArchitect = new SimpleBooleanProperty();
 	private final BooleanProperty canSelectArchitectCoordinates = new SimpleBooleanProperty();
 	private final BooleanProperty canSelectTargetTile = new SimpleBooleanProperty();
 
-	public GameModel() {
-		canSelectArchitect.bind(selectedArchitect.isNull()); //Si l'architecte n'est pas sélectionné alors on peut le faire
-		canSelectArchitectCoordinates.bind(selectedArchitect.isNotNull().and(selectedArchitectCoordinates.isNull())); //Si l'architecte est sélectionné et que les coordonnées n'ont pas été sélectionnées
-		canSelectTargetTile.bind(selectedArchitect.isNotNull().and(selectedArchitectCoordinates.isNotNull())); //Si l'architecte et les coordonnées sont sélectionnées
+	private final int maxRounds;
+
+	public GameModel(int maxRounds, int maxPlayers) {
+		this.maxRounds = maxRounds;
+
+		Quadropolis.getInstance().initGame(maxPlayers);
+
+		canSelectArchitect.bind(waitingNextTurn.not().and(selectedArchitect.isNull())); //Si l'architecte n'est pas sélectionné alors on peut le faire
+		canSelectArchitectCoordinates.bind(waitingNextTurn.not().and(selectedArchitect.isNotNull().and(selectedArchitectCoordinates.isNull()))); //Si l'architecte est sélectionné et que les coordonnées n'ont pas été sélectionnées
+		canSelectTargetTile.bind(waitingNextTurn.not().and(selectedArchitect.isNotNull().and(selectedArchitectCoordinates.isNotNull()))); //Si l'architecte et les coordonnées sont sélectionnées
+	}
+
+	public int getRound() {
+		return round.get();
+	}
+
+	public IntegerProperty roundProperty() {
+		return round;
 	}
 
 	public BooleanProperty canSelectArchitectProperty() {
@@ -73,20 +89,40 @@ public class GameModel {
 		return selectedArchitectCoordinates;
 	}
 
+	public boolean isWaitingNextTurn() {
+		return waitingNextTurn.get();
+	}
+
+	public BooleanProperty waitingNextTurnProperty() {
+		return waitingNextTurn;
+	}
+
 	public void nextPlayer() {
 		LOGGER.debug("Next player");
-
-		selectedArchitect.set(null);
-		selectedArchitectCoordinates.set(null);
 
 		final Quadropolis quadropolis = Quadropolis.getInstance();
 		final int currentPlayerNum = getCurrentPlayer().getPlayerNum();
 		if (currentPlayerNum == quadropolis.getMaxPlayers()) {
-			turn.set(turn.get() + 1);
+			if (round.get() == maxRounds) {
+				LOGGER.info("Jeu terminé");
+
+				System.exit(0);
+			}
+
+			round.set(round.get() + 1);
 
 			setCurrentPlayer(quadropolis.getPlayers().get(0));
 		} else {
 			setCurrentPlayer(quadropolis.getPlayers().get(currentPlayerNum)); //Le numéro du joueur est situé entre 1 et 4 ce qui veut dire qu'il pointe automatiquement vers le prochain
 		}
+
+		waitingNextTurn.set(false);
+	}
+
+	public void prepareNextTurn() {
+		selectedArchitect.set(null);
+		selectedArchitectCoordinates.set(null);
+
+		waitingNextTurn.set(true);
 	}
 }

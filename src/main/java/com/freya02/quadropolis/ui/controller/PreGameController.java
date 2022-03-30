@@ -33,9 +33,7 @@ public class PreGameController {
 	@FXML
 	private void onPlayAction(ActionEvent event) {
 		try {
-			final GameModel gameModel = new GameModel();
-
-			Quadropolis.getInstance().initGame(playersSpinner.getValue());
+			final GameModel gameModel = new GameModel(roundSpinner.getValue(), playersSpinner.getValue());
 
 			new GlobalPlateView(gameModel);
 

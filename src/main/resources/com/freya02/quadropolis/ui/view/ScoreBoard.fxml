@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox style="-fx-background-color: dbd6d0;" HBox.hgrow="ALWAYS">
+         <children>
+            <ImageView fitHeight="60.0" fitWidth="100.0">
+               <image>
+                  <Image url="@quadroLogo/JoueurLogo.PNG" />
+               </image>
+            </ImageView>
+         </children>
+      </VBox>
+      <VBox style="-fx-background-color: fefbc6;" HBox.hgrow="ALWAYS">
+         <children>
+            <ImageView fitHeight="60.0" fitWidth="100.0">
+               <image>
+                  <Image url="@quadroLogo/homeLogo.PNG" />
+               </image>
+            </ImageView>
+         </children>
+      </VBox>
+      <VBox style="-fx-background-color: ecf2c4;" HBox.hgrow="ALWAYS">
+         <children>
+            <ImageView fitHeight="60.0" fitWidth="100.0">
+               <image>
+                  <Image url="@quadroLogo/jardinLogo.PNG" />
+               </image>
+            </ImageView>
+         </children>
+      </VBox>
+      <VBox style="-fx-background-color: ddc4da;" HBox.hgrow="ALWAYS">
+         <children>
+            <ImageView fitHeight="60.0" fitWidth="100.0">
+               <image>
+                  <Image url="@quadroLogo/marketLogo.PNG" />
+               </image>
+            </ImageView>
+         </children>
+      </VBox>
+      <VBox style="-fx-background-color: f9c6a9;" HBox.hgrow="ALWAYS">
+         <children>
+            <ImageView fitHeight="60.0" fitWidth="100.0">
+               <image>
+                  <Image url="@quadroLogo/factoryLogo.PNG" />
+               </image>
+            </ImageView>
+         </children>
+      </VBox>
+      <VBox style="-fx-background-color: d3e9e7;" HBox.hgrow="ALWAYS">
+         <children>
+            <ImageView fitHeight="60.0" fitWidth="100.0">
+               <image>
+                  <Image url="@quadroLogo/hometownLogo.PNG" />
+               </image>
+            </ImageView>
+         </children>
+      </VBox>
+      <VBox style="-fx-background-color: cce6f7;" HBox.hgrow="ALWAYS">
+         <children>
+            <ImageView fitHeight="60.0" fitWidth="100.0">
+               <image>
+                  <Image url="@quadroLogo/portLogo.PNG" />
+               </image>
+            </ImageView>
+         </children>
+      </VBox>
+      <VBox style="-fx-background-color: ead7c9;" HBox.hgrow="ALWAYS">
+         <children>
+            <ImageView fitHeight="60.0" fitWidth="100.0">
+               <image>
+                  <Image url="@quadroLogo/remainingPeopleLogo.PNG" />
+               </image>
+            </ImageView>
+         </children>
+      </VBox>
+      <VBox style="-fx-background-color: ead7c9;" HBox.hgrow="ALWAYS">
+         <children>
+            <ImageView fitHeight="60.0" fitWidth="100.0">
+               <image>
+                  <Image url="@quadroLogo/remainingGasLogo.PNG" />
+               </image>
+            </ImageView>
+         </children>
+      </VBox>
+      <VBox style="-fx-background-color: dbd6d0;" HBox.hgrow="ALWAYS">
+         <children>
+            <ImageView fitHeight="60.0" fitWidth="100.0">
+               <image>
+                  <Image url="@quadroLogo/scoreLogo.PNG" />
+               </image>
+            </ImageView>
+         </children>
+      </VBox>
+   </children>
+</HBox>

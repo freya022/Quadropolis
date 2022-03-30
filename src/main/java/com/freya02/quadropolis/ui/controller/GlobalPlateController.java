@@ -1,15 +1,17 @@
 package com.freya02.quadropolis.ui.controller;
 
-import com.freya02.quadropolis.Logging;
-import com.freya02.quadropolis.PlacedArchitectCoordinates;
-import com.freya02.quadropolis.Quadropolis;
+import com.freya02.quadropolis.*;
 import com.freya02.quadropolis.plate.GlobalPlate;
 import com.freya02.quadropolis.plate.Tile;
 import com.freya02.quadropolis.ui.model.GameModel;
+import javafx.beans.InvalidationListener;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
+import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -24,17 +26,20 @@ public class GlobalPlateController {
 	private final GameModel gameModel;
 	private final Stage stage;
 
+	@FXML private Label tourLabel;
 	@FXML private VBox vbox;
 
 	public GlobalPlateController(GameModel gameModel, Stage stage) {
 		this.gameModel = gameModel;
 		this.stage = stage;
-
-		gameModel.currentPlayerProperty().addListener(x -> render());
 	}
 
 	@FXML
 	private void initialize() {
+		gameModel.currentPlayerProperty().addListener(x -> render());
+
+		tourLabel.textProperty().bind(new SimpleStringProperty("Round ").concat(gameModel.roundProperty().asString()));
+
 		for (int x = 0; x < globalPlate.getWidth(); x++) {
 			for (int y = 0; y < globalPlate.getHeight(); y++) {
 				final StackPane stackPane = getStackPane(x, y);
@@ -54,7 +59,7 @@ public class GlobalPlateController {
 							|| globalPlate.canClaimBuilding(newArchitect, PlacedArchitectCoordinates.fromLeft(finalY))
 							|| globalPlate.canClaimBuilding(newArchitect, PlacedArchitectCoordinates.fromRight(finalY));
 
-					//TODO make it more apparent
+//					stackPane.setOpacity(canClaimTile ? 1 : 0.2);
 					stackPane.setDisable(!canClaimTile);
 				});
 			}
@@ -71,13 +76,36 @@ public class GlobalPlateController {
 				final StackPane stackPane = getOuterStackPane(largeX, largeY);
 
 				if (stackPane.getStyleClass().contains("architectSelectableTile")) {
+					final PlacedArchitectCoordinates architectCoordinates = getArchitectCoordinates(largeX, largeY);
+
+					globalPlate.getPlacedArchitects().addListener((InvalidationListener) x -> updatePlacedArchitect(stackPane, architectCoordinates));
+
 					final BooleanProperty canClaim = new SimpleBooleanProperty();
 
-					//TODO show a ghost architect icon when hovering
 					stackPane.setCursor(Cursor.HAND);
 					stackPane.disableProperty().bind(gameModel.canSelectArchitectCoordinatesProperty().not().or(canClaim.not()));
+					stackPane.hoverProperty().addListener((a, b, isHovering) -> {
+						if (isHovering && gameModel.getSelectedArchitect() != null) {
+							final ImageView view = new ImageView(gameModel.getSelectedArchitect().asImage());
+							view.setPreserveRatio(true);
+							view.setFitWidth(100);
+							view.setFitHeight(100);
 
-					final PlacedArchitectCoordinates architectCoordinates = getArchitectCoordinates(largeX, largeY);
+							stackPane.getChildren().setAll(view);
+
+							final TileCoordinates globalTarget = architectCoordinates.toTileCoordinates(globalPlate, gameModel.getSelectedArchitect());
+
+							final StackPane globalTargetPane = getStackPane(globalTarget.x(), globalTarget.y());
+							globalTargetPane.setOpacity(0.75);
+						} else {
+							stackPane.getChildren().clear();
+
+							final TileCoordinates globalTarget = architectCoordinates.toTileCoordinates(globalPlate, gameModel.getSelectedArchitect());
+
+							final StackPane globalTargetPane = getStackPane(globalTarget.x(), globalTarget.y());
+							globalTargetPane.setOpacity(1);
+						}
+					});
 
 					gameModel.selectedArchitectProperty().addListener((a, b, newArchitect) -> {
 						if (newArchitect == null) {
@@ -99,11 +127,25 @@ public class GlobalPlateController {
 		render();
 	}
 
+	private void updatePlacedArchitect(StackPane stackPane, PlacedArchitectCoordinates architectCoordinates) {
+		for (PlacedArchitect placedArchitect : globalPlate.getPlacedArchitects()) {
+			if (architectCoordinates.equals(placedArchitect.getCoordinates())) {
+				final ImageView view = new ImageView(placedArchitect.getArchitect().asImage());
+				view.setPreserveRatio(true);
+				view.setFitWidth(100);
+				view.setFitHeight(100);
+
+				stackPane.getChildren().setAll(view);
+			}
+		}
+	}
+
 	private void onArchitectTileClick(PlacedArchitectCoordinates architectCoordinates) {
 		LOGGER.debug("Setting placed architected coordinates: {}", architectCoordinates);
 		gameModel.setSelectedArchitectCoordinates(architectCoordinates);
 	}
 
+	//TODO fonctions séparées pour calculer sur le plateau 5x5 et corriger les cases du plateau global
 	@NotNull
 	private PlacedArchitectCoordinates getArchitectCoordinates(int x, int y) {
 		//Ici on reçoit les coordonnées entre 0x0 et 7x7 (plateau + cases architectes), on doit réduire la coordonnée clé qu'à la transformation
@@ -143,8 +185,6 @@ public class GlobalPlateController {
 	}
 
 	private StackPane getOuterStackPane(int x, int y) {
-		//Offset by 1 because of hidden tiles on the UI to accommodate architects
-
 		return (StackPane) ((HBox) vbox.getChildren().get(y)).getChildren().get(x);
 	}
 
