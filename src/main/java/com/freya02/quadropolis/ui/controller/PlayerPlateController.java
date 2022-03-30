@@ -15,6 +15,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import org.slf4j.Logger;
 
@@ -31,7 +32,7 @@ public class PlayerPlateController {
 
 	@FXML private Label titleLabel, stepLabel, houseLabel, barrelLabel;
 	@FXML private VBox vbox;
-	@FXML private HBox architectsBox;
+	@FXML private TilePane architectsBox;
 	@FXML private Button nextPlayerButton;
 
 	public PlayerPlateController(GameModel gameModel, Player player) {
@@ -158,6 +159,6 @@ public class PlayerPlateController {
 	private StackPane getStackPane(int x, int y) {
 		//Offset by 1 because of hidden tiles on the UI to accommodate architects
 
-		return (StackPane) ((HBox) vbox.getChildren().get(y + 1)).getChildren().get(x + 1);
+		return (StackPane) ((HBox) vbox.getChildren().get(y)).getChildren().get(x);
 	}
 }
