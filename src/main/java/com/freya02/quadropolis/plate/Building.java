@@ -78,7 +78,14 @@ public class Building extends Tile {
 	}
 
 	public boolean canBeActivated() {
-		return canBeActivated && owner.getResources().has(activationCost) && activationCount + 1 >= stackCount;
+		int maxActivation;
+		if (buildingType == BuildingType.HOUSE) {
+			maxActivation = 4;
+		} else {
+			maxActivation = 1;
+		}
+
+		return canBeActivated && owner.getResources().has(activationCost) && activationCount + 1 >= stackCount && activationCount < maxActivation;
 	}
 
 	public void activate() {
