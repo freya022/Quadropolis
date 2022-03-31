@@ -4,6 +4,7 @@ import com.freya02.quadropolis.plate.GlobalPlate;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Quadropolis {
@@ -24,7 +25,7 @@ public class Quadropolis {
 		players = FXCollections.observableArrayList(
 				IntStream.rangeClosed(1, maxPlayers)
 						.mapToObj(playerNum -> new Player(gameMode, playerNum))
-						.toList()
+						.collect(Collectors.toList())
 		);
 	}
 

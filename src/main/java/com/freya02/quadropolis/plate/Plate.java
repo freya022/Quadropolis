@@ -63,10 +63,10 @@ public abstract class Plate {
 	}
 
 	private int getCoordinates(int x, int y) {
-		if (x < 0) throw new IllegalArgumentException("X < 0 : %d < 0".formatted(x));
-		if (y < 0) throw new IllegalArgumentException("Y < 0 : %d < 0".formatted(y));
-		if (x >= width) throw new IllegalArgumentException("X >= width : %d >= %d".formatted(x, width));
-		if (y >= height) throw new IllegalArgumentException("Y >= height : %d >= %d".formatted(y, height));
+		if (x < 0) throw new IllegalArgumentException(String.format("X < 0 : %d < 0", x));
+		if (y < 0) throw new IllegalArgumentException(String.format("Y < 0 : %d < 0", y));
+		if (x >= width) throw new IllegalArgumentException(String.format("X >= width : %d >= %d", x, width));
+		if (y >= height) throw new IllegalArgumentException(String.format("Y >= height : %d >= %d", y, height));
 
 		return x + y * width;
 	}

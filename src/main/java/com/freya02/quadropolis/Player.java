@@ -110,32 +110,32 @@ public class Player {
 		this.setScore(score);
 	}
 
-	public int getTownHallScore(){
+	public int getTownHallScore() {
 		int score = 0;
 		int cptTownHall = 0;
-		if(isQuartier(0,0)){
-			cptTownHall+=1;
+		if (isQuartier(0, 0)) {
+			cptTownHall += 1;
 		}
-		if(isQuartier(0,2)){
-			cptTownHall+=1;
+		if (isQuartier(0, 2)) {
+			cptTownHall += 1;
 		}
-		if(isQuartier(2,0)){
-			cptTownHall+=1;
+		if (isQuartier(2, 0)) {
+			cptTownHall += 1;
 		}
-		if(isQuartier(2,2)){
-			cptTownHall+=1;
+		if (isQuartier(2, 2)) {
+			cptTownHall += 1;
 		}
-		if(cptTownHall==1){
-			score+=2;
+		if (cptTownHall == 1) {
+			score += 2;
 		}
-		if(cptTownHall==2){
-			score+=5;
+		if (cptTownHall == 2) {
+			score += 5;
 		}
-		if(cptTownHall==3){
-			score+=9;
+		if (cptTownHall == 3) {
+			score += 9;
 		}
-		if(cptTownHall==4){
-			score+=14;
+		if (cptTownHall == 4) {
+			score += 14;
 		}
 		return score;
 	}
@@ -149,47 +149,59 @@ public class Player {
 		);
 
 		for (Tile tile : list) {
-			if (tile instanceof Building building && building.getBuildingType() == BuildingType.TOWN_HALL && building.getActivationCount()>0) {
-				return true;
+			if (tile instanceof Building) {
+				final Building building = (Building) tile;
+
+				if (building.getBuildingType() == BuildingType.TOWN_HALL && building.getActivationCount() > 0) {
+					return true;
+				}
 			}
 		}
 		return false;
 	}
 
-	public int getFactoryScore(){
+	public int getFactoryScore() {
 		int score = 0;
 		for (int baseX = 0; baseX < plate.getWidth(); baseX++) {
 			for (int baseY = 0; baseY < plate.getHeight(); baseY++) {
 				int cptFactoryMarket = 0;
 				int cptFactoryPort = 0;
-				final Tile tile = plate.get(baseX, baseY);
-				final Tile tileUp = plate.get(baseX,baseY+1);
-				final Tile tileDown = plate.get(baseX,baseY-1);
-				final Tile tileRight = plate.get(baseX+1, baseY);
-				final Tile tileLeft = plate.get(baseX-1, baseY);
-				if (tile instanceof Building building && building.getBuildingType() == BuildingType.GARDEN && ((Building) tile).getActivationCount()>0) {
-					if (tileUp instanceof Building buildingUp && buildingUp.getBuildingType() == BuildingType.BUSINESS && buildingUp.getActivationCount()>0) {
+
+				final Building building = (Building) plate.tryGet(baseX, baseY);
+				final Building buildingUp = (Building) plate.tryGet(baseX, baseY + 1);
+				final Building buildingDown = (Building) plate.tryGet(baseX, baseY - 1);
+				final Building buildingRight = (Building) plate.tryGet(baseX + 1, baseY);
+				final Building buildingLeft = (Building) plate.tryGet(baseX - 1, baseY);
+
+				if (building == null) continue;
+				if (buildingUp == null) continue;
+				if (buildingDown == null) continue;
+				if (buildingRight == null) continue;
+				if (buildingLeft == null) continue;
+
+				if (building.getBuildingType() == BuildingType.GARDEN && building.getActivationCount() > 0) {
+					if (buildingUp.getBuildingType() == BuildingType.BUSINESS && buildingUp.getActivationCount() > 0) {
 						cptFactoryMarket++;
 					}
-					if (tileDown instanceof Building buildingDown && buildingDown.getBuildingType() == BuildingType.BUSINESS && buildingDown.getActivationCount()>0) {
+					if (buildingDown.getBuildingType() == BuildingType.BUSINESS && buildingDown.getActivationCount() > 0) {
 						cptFactoryMarket++;
 					}
-					if (tileRight instanceof Building buildingRight && buildingRight.getBuildingType() == BuildingType.BUSINESS && buildingRight.getActivationCount()>0) {
+					if (buildingRight.getBuildingType() == BuildingType.BUSINESS && buildingRight.getActivationCount() > 0) {
 						cptFactoryMarket++;
 					}
-					if (tileLeft instanceof Building buildingLeft && buildingLeft.getBuildingType() == BuildingType.BUSINESS && buildingLeft.getActivationCount()>0) {
+					if (buildingLeft.getBuildingType() == BuildingType.BUSINESS && buildingLeft.getActivationCount() > 0) {
 						cptFactoryMarket++;
 					}
-					if (tileUp instanceof Building buildingUp && buildingUp.getBuildingType() == BuildingType.PORT && buildingUp.getActivationCount()>0) {
+					if (buildingUp.getBuildingType() == BuildingType.PORT && buildingUp.getActivationCount() > 0) {
 						cptFactoryPort++;
 					}
-					if (tileDown instanceof Building buildingDown && buildingDown.getBuildingType() == BuildingType.PORT && buildingDown.getActivationCount()>0) {
+					if (buildingDown.getBuildingType() == BuildingType.PORT && buildingDown.getActivationCount() > 0) {
 						cptFactoryPort++;
 					}
-					if (tileRight instanceof Building buildingRight && buildingRight.getBuildingType() == BuildingType.PORT && buildingRight.getActivationCount()>0) {
+					if (buildingRight.getBuildingType() == BuildingType.PORT && buildingRight.getActivationCount() > 0) {
 						cptFactoryPort++;
 					}
-					if (tileLeft instanceof Building buildingLeft && buildingLeft.getBuildingType() == BuildingType.PORT && buildingLeft.getActivationCount()>0) {
+					if (buildingLeft.getBuildingType() == BuildingType.PORT && buildingLeft.getActivationCount() > 0) {
 						cptFactoryPort++;
 					}
 					score += cptFactoryMarket * 2;
@@ -206,23 +218,30 @@ public class Player {
 		int score = 0;
 		for (int baseX = 0; baseX < plate.getWidth(); baseX++) {
 			for (int baseY = 0; baseY < plate.getHeight(); baseY++) {
-				final Tile tile = plate.get(baseX, baseY);
-				final Tile tileUp = plate.get(baseX,baseY+1);
-				final Tile tileDown = plate.get(baseX,baseY-1);
-				final Tile tileRight = plate.get(baseX+1, baseY);
-				final Tile tileLeft = plate.get(baseX-1, baseY);
+				final Building building = (Building) plate.tryGet(baseX, baseY);
+				final Building buildingUp = (Building) plate.tryGet(baseX, baseY + 1);
+				final Building buildingDown = (Building) plate.tryGet(baseX, baseY - 1);
+				final Building buildingRight = (Building) plate.tryGet(baseX + 1, baseY);
+				final Building buildingLeft = (Building) plate.tryGet(baseX - 1, baseY);
+
+				if (building == null) continue;
+				if (buildingUp == null) continue;
+				if (buildingDown == null) continue;
+				if (buildingRight == null) continue;
+				if (buildingLeft == null) continue;
+
 				int cptGarden = 0;
-				if (tile instanceof Building building && building.getBuildingType() == BuildingType.GARDEN) {
-					if (tileUp instanceof Building buildingUp && buildingUp.getBuildingType() == BuildingType.HOUSE && buildingUp.getActivationCount()>0) {
+				if (building.getBuildingType() == BuildingType.GARDEN) {
+					if (buildingUp.getBuildingType() == BuildingType.HOUSE && buildingUp.getActivationCount() > 0) {
 						cptGarden++;
 					}
-					if (tileDown instanceof Building buildingDown && buildingDown.getBuildingType() == BuildingType.HOUSE && buildingDown.getActivationCount()>0) {
+					if (buildingDown.getBuildingType() == BuildingType.HOUSE && buildingDown.getActivationCount() > 0) {
 						cptGarden++;
 					}
-					if (tileRight instanceof Building buildingRight && buildingRight.getBuildingType() == BuildingType.HOUSE && buildingRight.getActivationCount()>0) {
+					if (buildingRight.getBuildingType() == BuildingType.HOUSE && buildingRight.getActivationCount() > 0) {
 						cptGarden++;
 					}
-					if (tileLeft instanceof Building buildingLeft && buildingLeft.getBuildingType() == BuildingType.HOUSE && buildingLeft.getActivationCount()>0) {
+					if (buildingLeft.getBuildingType() == BuildingType.HOUSE && buildingLeft.getActivationCount() > 0) {
 						cptGarden++;
 					}
 					if (cptGarden == 1) {
@@ -247,15 +266,31 @@ public class Player {
 		int score = 0;
 
 		for (Tile tile : plate.getTiles()) { //Pas besoin de savoir le x ou le y ici, on veut juste savoir le nombre de stack de chaque maison
-			if (tile instanceof Building building && building.getBuildingType() == BuildingType.BUSINESS) { //Si c'est un commerce
-				score += switch (building.getActivationCount()) { //Voir la fiche de score pour les commerces, page 5
-					case 0 -> 0;
-					case 1 -> 1;
-					case 2 -> 2;
-					case 3 -> 4;
-					case 4 -> 7;
-					default -> throw new IllegalArgumentException("A business has more than 4 people"); //Au cas où
-				};
+			if (tile instanceof Building) {
+				final Building building = (Building) tile;
+
+				if (building.getBuildingType() == BuildingType.BUSINESS) { //Si c'est un commerce
+					//Voir la fiche de score pour les commerces, page 5
+					switch (building.getActivationCount()) {
+						case 0:
+							score += 0;
+							break;
+						case 1:
+							score += 1;
+							break;
+						case 2:
+							score += 2;
+							break;
+						case 3:
+							score += 4;
+							break;
+						case 4:
+							score += 7;
+							break;
+						default:
+							throw new IllegalArgumentException("A business has more than 4 people"); //Au cas où
+					}
+				}
 			}
 		}
 
@@ -265,14 +300,24 @@ public class Player {
 	public int getHouseScore() {
 		int score = 0;
 		for (Tile tile : plate.getTiles()) { //Pas besoin de savoir le x ou le y ici, on veut juste savoir le nombre de stack de chaque maison
-			if (tile instanceof Building building && building.getBuildingType() == BuildingType.HOUSE) { //Si c'est une maison
-				score += switch (building.getStackCount()) { //Voir la fiche de score pour les habitations, page 5
-					case 1 -> 1;
-					case 2 -> 3;
-					case 3 -> 6;
-					case 4 -> 10;
-					default -> throw new IllegalArgumentException("A house has more than 4 stacks"); //Au cas où
-				};
+			if (tile instanceof Building) {
+				final Building building = (Building) tile;
+
+				if (building.getBuildingType() == BuildingType.HOUSE) { //Si c'est une maison
+					//Voir la fiche de score pour les habitations, page 5
+
+					if (building.getStackCount() == 1) {
+						score += 1;
+					} else if (building.getStackCount() == 2) {
+						score += 3;
+					} else if (building.getStackCount() == 3) {
+						score += 6;
+					} else if (building.getStackCount() == 4) {
+						score += 10;
+					} else {
+						throw new IllegalArgumentException("A house has more than 4 stacks"); //Au cas où
+					}
+				}
 			}
 		}
 		return score;
@@ -286,17 +331,25 @@ public class Player {
 		//On regarde chaque case, si on trouve un port alors on cherche une ligne / colonne
 		for (int baseX = 0; baseX < plate.getWidth(); baseX++) {
 			for (int baseY = 0; baseY < plate.getHeight(); baseY++) {
-				final Tile tile = plate.get(baseX, baseY);
+				final Building building = (Building) plate.get(baseX, baseY);
 
-				if (tile instanceof Building building && building.getBuildingType() == BuildingType.PORT) {
+				if (building == null) continue;
+
+				if (building.getBuildingType() == BuildingType.PORT) {
 					{
 						//Regardons les colonnes en premier
 						int length = 0;
 						for (int y = baseY; y < plate.getHeight(); y++) {
 							final Tile otherTile = plate.get(baseX, y);
 
-							if (otherTile instanceof Building otherBuilding && otherBuilding.getBuildingType() == BuildingType.PORT) {
-								length++;
+							if (otherTile instanceof Building) {
+								final Building otherBuilding = (Building) otherTile;
+
+								if (otherBuilding.getBuildingType() == BuildingType.PORT) {
+									length++;
+								} else {
+									break;
+								}
 							} else {
 								break;
 							}
@@ -311,8 +364,14 @@ public class Player {
 						for (int x = baseX; x < plate.getWidth(); x++) {
 							final Tile otherTile = plate.get(x, baseY);
 
-							if (otherTile instanceof Building otherBuilding && otherBuilding.getBuildingType() == BuildingType.PORT) {
-								length++;
+							if (otherTile instanceof Building) {
+								final Building otherBuilding = (Building) otherTile;
+
+								if (otherBuilding.getBuildingType() == BuildingType.PORT) {
+									length++;
+								} else {
+									break;
+								}
 							} else {
 								break;
 							}
@@ -324,13 +383,18 @@ public class Player {
 			}
 		}
 
-		return switch (longest) {
-			case 1 -> 0;
-			case 2 -> 3;
-			case 3 -> 7;
-			case 4 -> 12;
-			default -> throw new IllegalStateException("Unexpected value: " + longest);
-		};
+		switch (longest) {
+			case 1:
+				return 0;
+			case 2:
+				return 3;
+			case 3:
+				return 7;
+			case 4:
+				return 12;
+			default:
+				throw new IllegalStateException("Unexpected value: " + longest);
+		}
 	}
 
 	public int getPlayerNum() {
@@ -373,17 +437,17 @@ public class Player {
 		return turn.get();
 	}
 
-	public IntegerProperty turnProperty() {
-		return turn;
-	}
-
 	public void setTurn(int turn) {
 		this.turn.set(turn);
 	}
 
+	public IntegerProperty turnProperty() {
+		return turn;
+	}
+
 	@Override
 	public String toString() {
-		return "Player{playerNum=%d}".formatted(playerNum);
+		return String.format("Player{playerNum=%d}", playerNum);
 	}
 
 	public void regenArchitects() {

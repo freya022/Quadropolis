@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PlayerPlateController {
 	private static final Logger LOGGER = Logging.getLogger();
@@ -138,7 +139,7 @@ public class PlayerPlateController {
 	private void updateArchitects() {
 		List<Node> nodes = new ArrayList<>();
 
-		for (Architect architect : player.getArchitects().stream().distinct().toList()) { //En mode expert on peut utiliser des architectes plusieurs fois
+		for (Architect architect : player.getArchitects().stream().distinct().collect(Collectors.toList())) { //En mode expert on peut utiliser des architectes plusieurs fois
 			final ImageView view = new ImageView(architect.asImage());
 			view.setFitHeight(100);
 			view.setFitWidth(100);
@@ -167,7 +168,9 @@ public class PlayerPlateController {
 			for (int x = 0; x < plate.getWidth(); x++) {
 				for (int y = 0; y < plate.getHeight(); y++) {
 					final Tile tile = plate.get(x, y);
-					if (!(tile instanceof Building building)) continue;
+					if (!(tile instanceof Building)) continue;
+
+					final Building building = (Building) tile;
 
 					final StackPane stackPane = getStackPane(x, y);
 

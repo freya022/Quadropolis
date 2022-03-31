@@ -53,5 +53,21 @@ public class PlayerPlateView {
 		stage.setScene(playerPlateScene.scene());
 	}
 
-	private record PlayerPlateScene(Scene scene, PlayerPlateController controller) {}
+	private class PlayerPlateScene {
+		private final Scene scene;
+		private final PlayerPlateController controller;
+
+		private PlayerPlateScene(Scene scene, PlayerPlateController controller) {
+			this.scene = scene;
+			this.controller = controller;
+		}
+
+		public Scene scene() {
+			return scene;
+		}
+
+		public PlayerPlateController controller() {
+			return controller;
+		}
+	}
 }

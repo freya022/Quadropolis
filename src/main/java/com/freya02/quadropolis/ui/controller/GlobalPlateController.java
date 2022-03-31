@@ -160,7 +160,7 @@ public class GlobalPlateController {
 		} else if (y == globalPlate.getHeight() + 1) {
 			return PlacedArchitectCoordinates.fromBottom(Math.max(0, x - 1));
 		} else {
-			throw new IllegalArgumentException("x = %d, y = %d".formatted(x, y));
+			throw new IllegalArgumentException(String.format("x = %d, y = %d", x, y));
 		}
 	}
 

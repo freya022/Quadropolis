@@ -26,12 +26,16 @@ public class TestConsole {
 					for (int y = 0; y < quadropolis.getGlobalPlate().getHeight(); y++) {
 						final Tile tile = quadropolis.getGlobalPlate().get(x, y);
 
-						final String str = switch (tile) {
-							case Building ignored -> "B";
-							case null -> " ";
-							case Urbanist ignored -> "U";
-							default -> throw new IllegalArgumentException("Tile: " + tile);
-						};
+						String str;
+						if (tile instanceof Building) {
+							str = "B";
+						} else if (tile == null) {
+							str = " ";
+						} else if (tile instanceof Urbanist) {
+							str = "U";
+						} else {
+							throw new IllegalArgumentException("Tile: " + tile);
+						}
 
 						System.out.print(str + " ");
 					}
@@ -55,13 +59,24 @@ public class TestConsole {
 				System.out.print("Placement (top, bottom, left, right): ");
 				final String placement = scanner.nextLine();
 
-				final PlacedArchitectCoordinates architectCoordinates = switch (placement) {
-					case "top" -> PlacedArchitectCoordinates.fromTop(reach);
-					case "bottom" -> PlacedArchitectCoordinates.fromBottom(reach);
-					case "left" -> PlacedArchitectCoordinates.fromLeft(reach);
-					case "right" -> PlacedArchitectCoordinates.fromRight(reach);
-					default -> null;
-				};
+				PlacedArchitectCoordinates architectCoordinates;
+				switch (placement) {
+					case "top":
+						architectCoordinates = PlacedArchitectCoordinates.fromTop(reach);
+						break;
+					case "bottom":
+						architectCoordinates = PlacedArchitectCoordinates.fromBottom(reach);
+						break;
+					case "left":
+						architectCoordinates = PlacedArchitectCoordinates.fromLeft(reach);
+						break;
+					case "right":
+						architectCoordinates = PlacedArchitectCoordinates.fromRight(reach);
+						break;
+					default:
+						architectCoordinates = null;
+						break;
+				}
 
 				if (architectCoordinates == null) continue;
 

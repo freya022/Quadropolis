@@ -23,17 +23,41 @@ public class GlobalPlate extends Plate {
 				final BuildingType[] buildingTypes = BuildingType.values();
 				final BuildingType buildingType = buildingTypes[random.nextInt(buildingTypes.length)];
 
-				final Resources activationCost = switch (buildingType) {
-					case HOUSE, BUSINESS -> new Resources(0, 1);
-					case GARDEN -> new Resources(0, 0);
-					case TOWN_HALL, PORT, FACTORY -> new Resources(1, 0);
-				};
+				Resources activationCost;
+				switch (buildingType) {
+					case HOUSE:
+					case BUSINESS:
+						activationCost = new Resources(0, 1);
+						break;
+					case GARDEN:
+						activationCost = new Resources(0, 0);
+						break;
+					case TOWN_HALL:
+					case PORT:
+					case FACTORY:
+						activationCost = new Resources(1, 0);
+						break;
+					default:
+						throw new IllegalArgumentException();
+				}
 
-				final Resources revenue = switch (buildingType) {
-					case HOUSE -> new Resources(1, 0);
-					case GARDEN, TOWN_HALL, BUSINESS, PORT -> new Resources(0, 0);
-					case FACTORY -> new Resources(0, 1);
-				};
+				Resources revenue;
+				switch (buildingType) {
+					case HOUSE:
+						revenue = new Resources(1, 0);
+						break;
+					case GARDEN:
+					case TOWN_HALL:
+					case BUSINESS:
+					case PORT:
+						revenue = new Resources(0, 0);
+						break;
+					case FACTORY:
+						revenue = new Resources(0, 1);
+						break;
+					default:
+						throw new IllegalArgumentException();
+				}
 
 				final boolean canBeActivated = buildingType != BuildingType.GARDEN;
 
@@ -82,7 +106,7 @@ public class GlobalPlate extends Plate {
 
 	public Building claimBuilding(Player player, Architect architect, PlacedArchitectCoordinates architectCoordinates, TileCoordinates targetCoordinates) {
 		if (!canClaimBuilding(architect, architectCoordinates)) {
-			throw new IllegalStateException("Cannot claim building by placing an architect of reach %d at **architect** coordinates: %d, %d".formatted(architect.getReach(),
+			throw new IllegalStateException(String.format("Cannot claim building by placing an architect of reach %d at **architect** coordinates: %d, %d", architect.getReach(),
 					architectCoordinates.x(),
 					architectCoordinates.y()));
 		}
@@ -99,7 +123,9 @@ public class GlobalPlate extends Plate {
 		final Tile tile = this.set(tileCoordinates, urbanist);
 		urbanist.setCoords(tileCoordinates);
 
-		if (tile instanceof Building building) {
+		if (tile instanceof Building) {
+			final Building building = (Building) tile;
+
 			building.setOwner(player);
 
 			building.getRevenue().copyTo(player.getResources());

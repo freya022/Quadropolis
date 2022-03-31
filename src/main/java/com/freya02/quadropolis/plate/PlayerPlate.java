@@ -16,10 +16,12 @@ public class PlayerPlate extends Plate {
 		if (currentTile == null) {
 			set(targetCoordinates, building);
 		} else {
-			if (currentTile instanceof Building currentBuilding) {
+			if (currentTile instanceof Building) {
+				final Building currentBuilding = (Building) currentTile;
+
 				currentBuilding.stack();
 			} else {
-				throw new IllegalStateException("Tried to stack a building at %dx%d but it was an %s".formatted(targetCoordinates.x(), targetCoordinates.y(), currentTile));
+				throw new IllegalStateException(String.format("Tried to stack a building at %dx%d but it was an %s", targetCoordinates.x(), targetCoordinates.y(), currentTile));
 			}
 		}
 	}
