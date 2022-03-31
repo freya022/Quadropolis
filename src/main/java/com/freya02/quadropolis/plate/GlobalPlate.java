@@ -16,6 +16,12 @@ public class GlobalPlate extends Plate {
 	public GlobalPlate() {
 		super(WIDTH, HEIGHT);
 
+		placeBuildings();
+	}
+
+	public void placeBuildings() {
+		nullFill();
+
 		final ThreadLocalRandom random = ThreadLocalRandom.current();
 
 		for (int x = 0; x < WIDTH; x++) {
