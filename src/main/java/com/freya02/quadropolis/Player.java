@@ -52,6 +52,10 @@ public class Player {
 
 		score += getTownHallScore();
 
+		score -= getResources().getBarrels();
+
+		score -= getResources().getHouses();
+
 		//TODO remplacer le reste des calculs par des fonctions individuelles
 
 		//PlayerPlate PP = getPlate();
