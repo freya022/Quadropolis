@@ -128,6 +128,8 @@ public class GlobalPlateController {
 	}
 
 	private void updatePlacedArchitect(StackPane stackPane, PlacedArchitectCoordinates architectCoordinates) {
+		stackPane.getChildren().clear();
+
 		for (PlacedArchitect placedArchitect : globalPlate.getPlacedArchitects()) {
 			if (architectCoordinates.equals(placedArchitect.getCoordinates())) {
 				final ImageView view = new ImageView(placedArchitect.getArchitect().asImage());

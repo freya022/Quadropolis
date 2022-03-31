@@ -128,7 +128,7 @@ public class PlayerPlateController {
 	private void updateArchitects() {
 		List<Node> nodes = new ArrayList<>();
 
-		for (Architect architect : player.getArchitects()) {
+		for (Architect architect : player.getArchitects().stream().distinct().toList()) { //En mode expert on peut utiliser des architectes plusieurs fois
 			final ImageView view = new ImageView(architect.asImage());
 			view.setFitHeight(100);
 			view.setFitWidth(100);

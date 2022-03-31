@@ -8,10 +8,12 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.IntStream;
 
 public class Player {
+	private static final ObservableList<Architect> sharedArchitects = FXCollections.observableArrayList();
+
 	private final Resources resources = new Resources();
 
 	private final IntegerProperty score = new SimpleIntegerProperty();
@@ -30,13 +32,31 @@ public class Player {
 		this.playerNum = playerNum;
 		this.plate = new PlayerPlate(gameMode);
 
-		this.architects = FXCollections.observableArrayList(retrieveArchitects());
+		if (gameMode == GameMode.CLASSIC) {
+			this.architects = FXCollections.observableArrayList(retrieveArchitects());
+		} else {
+			sharedArchitects.setAll(retrieveArchitects());
+
+			this.architects = sharedArchitects;
+		}
 	}
 
 	private List<Architect> retrieveArchitects() {
-		return IntStream.range(0, gameMode.getMaxArchitects())
-				.mapToObj(reach -> new Architect(this, gameMode, reach))
-				.toList();
+		final List<Architect> list = new ArrayList<>();
+
+		if (gameMode == GameMode.CLASSIC) {
+			for (int reach = 0; reach < gameMode.getMaxArchitects(); reach++) {
+				list.add(new Architect(this, gameMode, reach));
+			}
+		} else {
+			for (int reach = 0; reach < gameMode.getMaxArchitects(); reach++) {
+				for (int player = 0; player < Quadropolis.getInstance().getMaxPlayers(); player++) {
+					list.add(new Architect(this, gameMode, reach));
+				}
+			}
+		}
+
+		return list;
 	}
 
 	public int getPlayerNum() {
@@ -89,6 +109,7 @@ public class Player {
 	}
 
 	public void regenArchitects() {
-		architects.setAll(retrieveArchitects());
+		architects.clear();
+		architects.addAll(retrieveArchitects());
 	}
 }

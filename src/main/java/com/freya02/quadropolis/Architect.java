@@ -35,4 +35,19 @@ public class Architect {
 
 		return new Image(Utils.getResourceAsStream(url));
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		Architect architect = (Architect) o;
+
+		return reach == architect.reach;
+	}
+
+	@Override
+	public int hashCode() {
+		return reach;
+	}
 }
