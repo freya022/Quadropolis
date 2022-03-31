@@ -14,6 +14,7 @@ import javafx.collections.ObservableList;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.IntStream;
 
 public class Player {
@@ -45,49 +46,154 @@ public class Player {
 
 		score += getPortScore();
 
+		score += getGardenScore();
+
+		score += getFactoryScore();
+
+		score += getTownHallScore();
+
 		//TODO remplacer le reste des calculs par des fonctions individuelles
 
-		PlayerPlate PP = getPlate();
-		ArrayList<Building> quartier1= new ArrayList<Building>((Collection<? extends Building>) Arrays.asList(PP.get(0,0),PP.get(1,0),PP.get(0,1),PP.get(1,1)));
-		ArrayList<Building> quartier2= new ArrayList<Building>((Collection<? extends Building>) Arrays.asList(PP.get(2,0),PP.get(3,0),PP.get(2,1),PP.get(3,1)));
-		ArrayList<Building> quartier3= new ArrayList<Building>((Collection<? extends Building>) Arrays.asList(PP.get(0,2),PP.get(1,2),PP.get(1,3),PP.get(0,3)));
-		ArrayList<Building> quartier4= new ArrayList<Building>((Collection<? extends Building>) Arrays.asList(PP.get(2,2),PP.get(2,3),PP.get(3,2),PP.get(3,3)));
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 4; j++) {
-				Building b = (Building) PP.get(i, j);
-				Building caseHaut = (Building) PP.tryGet(i - 1, j);
-				Building caseBas = (Building) PP.tryGet(i + 1, j);
-				Building caseDroite = (Building) PP.tryGet(i, j + 1);
-				Building caseGauche = (Building) PP.tryGet(i, j - 1);
-				if (b.getBuildingType().equals(BuildingType.HOUSE) && b.getActivationCount() > 0) {
-					score++;
+		//PlayerPlate PP = getPlate();
+		//for (int i = 0; i < 4; i++) {
+		//	for (int j = 0; j < 4; j++) {
+		//		Building b = (Building) PP.get(i, j);
+		//		Building caseHaut = (Building) PP.tryGet(i - 1, j);
+		//		Building caseBas = (Building) PP.tryGet(i + 1, j);
+		//		Building caseDroite = (Building) PP.tryGet(i, j + 1);
+		//		Building caseGauche = (Building) PP.tryGet(i, j - 1);
+		//		if (b.getBuildingType().equals(BuildingType.BUSINESS) && b.getActivationCount() > 0) {
+		//			if (b.getActivationCount() == 1) {
+		//				score++;
+		//			}
+		//			if (b.getActivationCount() == 2) {
+		//				score += 2;
+		//			}
+		//			if (b.getActivationCount() == 3) {
+		//				score += 4;
+		//			}
+		//			if (b.getActivationCount() == 4) {
+		//				score += 7;
+		//			}
+		//		}
+		//	}
+		//}
+		this.setScore(score);
+	}
+
+	private int getTownHallScore(){
+		int score = 0;
+		int cptTownHall = 0;
+		if(isQuartier(0,0)){
+			cptTownHall+=1;
+		}
+		if(isQuartier(0,2)){
+			cptTownHall+=1;
+		}
+		if(isQuartier(2,0)){
+			cptTownHall+=1;
+		}
+		if(isQuartier(2,2)){
+			cptTownHall+=1;
+		}
+		if(cptTownHall==1){
+			score+=2;
+		}
+		if(cptTownHall==2){
+			score+=5;
+		}
+		if(cptTownHall==3){
+			score+=9;
+		}
+		if(cptTownHall==4){
+			score+=14;
+		}
+		return score;
+	}
+
+	private boolean isQuartier(int x, int y) {
+		final List<Tile> list = List.of(
+				plate.get(x, y),
+				plate.get(x + 1, y),
+				plate.get(x, y + 1),
+				plate.get(x + 1, y + 1)
+		);
+
+		for (Tile tile : list) {
+			if (tile instanceof Building building && building.getBuildingType() == BuildingType.TOWN_HALL && building.getActivationCount()>0) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private int getFactoryScore(){
+		int score = 0;
+		for (int baseX = 0; baseX < plate.getWidth(); baseX++) {
+			for (int baseY = 0; baseY < plate.getHeight(); baseY++) {
+				int cptFactoryMarket = 0;
+				int cptFactoryPort = 0;
+				final Tile tile = plate.get(baseX, baseY);
+				final Tile tileUp = plate.get(baseX - 1, baseY);
+				final Tile tileDown = plate.get(baseX + 1, baseY);
+				final Tile tileRight = plate.get(baseX, baseY + 1);
+				final Tile tileLeft = plate.get(baseX, baseY - 1);
+				if (tile instanceof Building building && building.getBuildingType() == BuildingType.GARDEN && ((Building) tile).getActivationCount()>0) {
+					if (tileUp instanceof Building buildingUp && buildingUp.getBuildingType() == BuildingType.BUSINESS && buildingUp.getActivationCount()>0) {
+						cptFactoryMarket++;
+					}
+					if (tileDown instanceof Building buildingDown && buildingDown.getBuildingType() == BuildingType.BUSINESS && buildingDown.getActivationCount()>0) {
+						cptFactoryMarket++;
+					}
+					if (tileRight instanceof Building buildingRight && buildingRight.getBuildingType() == BuildingType.BUSINESS && buildingRight.getActivationCount()>0) {
+						cptFactoryMarket++;
+					}
+					if (tileLeft instanceof Building buildingLeft && buildingLeft.getBuildingType() == BuildingType.BUSINESS && buildingLeft.getActivationCount()>0) {
+						cptFactoryMarket++;
+					}
+					if (tileUp instanceof Building buildingUp && buildingUp.getBuildingType() == BuildingType.PORT && buildingUp.getActivationCount()>0) {
+						cptFactoryPort++;
+					}
+					if (tileDown instanceof Building buildingDown && buildingDown.getBuildingType() == BuildingType.PORT && buildingDown.getActivationCount()>0) {
+						cptFactoryPort++;
+					}
+					if (tileRight instanceof Building buildingRight && buildingRight.getBuildingType() == BuildingType.PORT && buildingRight.getActivationCount()>0) {
+						cptFactoryPort++;
+					}
+					if (tileLeft instanceof Building buildingLeft && buildingLeft.getBuildingType() == BuildingType.PORT && buildingLeft.getActivationCount()>0) {
+						cptFactoryPort++;
+					}
+					score += cptFactoryMarket * 2;
+					score += cptFactoryPort * 3;
 				}
-				if (b.getBuildingType().equals(BuildingType.BUSINESS) && b.getActivationCount() > 0) {
-					if (b.getActivationCount() == 1) {
-						score++;
-					}
-					if (b.getActivationCount() == 2) {
-						score += 2;
-					}
-					if (b.getActivationCount() == 3) {
-						score += 4;
-					}
-					if (b.getActivationCount() == 4) {
-						score += 7;
-					}
-				}
+			}
+		}
+
+		return score;
+	}
+
+
+	private int getGardenScore() {
+		int score = 0;
+		for (int baseX = 0; baseX < plate.getWidth(); baseX++) {
+			for (int baseY = 0; baseY < plate.getHeight(); baseY++) {
+				final Tile tile = plate.get(baseX, baseY);
+				final Tile tileUp = plate.get(baseX - 1, baseY);
+				final Tile tileDown = plate.get(baseX + 1, baseY);
+				final Tile tileRight = plate.get(baseX, baseY + 1);
+				final Tile tileLeft = plate.get(baseX, baseY - 1);
 				int cptGarden = 0;
-				if (b.getBuildingType().equals(BuildingType.GARDEN)) {
-					if (PP.tryGet(i - 1, j) != null && caseHaut.getBuildingType().equals(BuildingType.HOUSE)) {
+				if (tile instanceof Building building && building.getBuildingType() == BuildingType.GARDEN) {
+					if (tileUp instanceof Building buildingUp && buildingUp.getBuildingType() == BuildingType.HOUSE && buildingUp.getActivationCount()>0) {
 						cptGarden++;
 					}
-					if (PP.tryGet(i + 1, j) != null && caseBas.getBuildingType().equals(BuildingType.HOUSE)) {
+					if (tileDown instanceof Building buildingDown && buildingDown.getBuildingType() == BuildingType.HOUSE && buildingDown.getActivationCount()>0) {
 						cptGarden++;
 					}
-					if (PP.tryGet(i, j + 1) != null && caseDroite.getBuildingType().equals(BuildingType.HOUSE)) {
+					if (tileRight instanceof Building buildingRight && buildingRight.getBuildingType() == BuildingType.HOUSE && buildingRight.getActivationCount()>0) {
 						cptGarden++;
 					}
-					if (PP.tryGet(i, j - 1) != null && caseGauche.getBuildingType().equals(BuildingType.HOUSE)) {
+					if (tileLeft instanceof Building buildingLeft && buildingLeft.getBuildingType() == BuildingType.HOUSE && buildingLeft.getActivationCount()>0) {
 						cptGarden++;
 					}
 					if (cptGarden == 1) {
@@ -103,78 +209,14 @@ public class Player {
 						score += 11;
 					}
 				}
-				int cptFactoryMarket = 0;
-				int cptFactoryPort = 0;
-				if (b.getBuildingType().equals(BuildingType.FACTORY) && b.getActivationCount()>0) {
-					if (PP.tryGet(i - 1, j) != null && caseHaut.getBuildingType().equals(BuildingType.BUSINESS) && caseHaut.getActivationCount()>0) {
-						cptFactoryMarket++;
-					}
-					if (PP.tryGet(i + 1, j) != null && caseBas.getBuildingType().equals(BuildingType.BUSINESS) && caseBas.getActivationCount()>0) {
-						cptFactoryMarket++;
-					}
-					if (PP.tryGet(i, j + 1) != null && caseDroite.getBuildingType().equals(BuildingType.BUSINESS) && caseDroite.getActivationCount()>0) {
-						cptFactoryMarket++;
-					}
-					if (PP.tryGet(i, j - 1) != null && caseGauche.getBuildingType().equals(BuildingType.BUSINESS) && caseGauche.getActivationCount()>0) {
-						cptFactoryMarket++;
-					}
-					score += cptFactoryMarket * 2;
-					if (cptGarden == 2) {
-						score += 4;
-					}
-					if (PP.tryGet(i - 1, j) != null && caseHaut.getBuildingType().equals(BuildingType.PORT) && caseHaut.getActivationCount()>0) {
-						cptFactoryPort++;
-					}
-					if (PP.tryGet(i + 1, j) != null && caseBas.getBuildingType().equals(BuildingType.PORT) && caseBas.getActivationCount()>0) {
-						cptFactoryPort++;
-					}
-					if (PP.tryGet(i, j + 1) != null && caseDroite.getBuildingType().equals(BuildingType.PORT) && caseDroite.getActivationCount()>0) {
-						cptFactoryPort++;
-					}
-					if (PP.tryGet(i, j - 1) != null && caseGauche.getBuildingType().equals(BuildingType.PORT) && caseGauche.getActivationCount()>0) {
-						cptFactoryPort++;
-					}
-					score += cptFactoryMarket * 2;
-					score += cptFactoryPort * 3;
-
-				}
-				if (b.getBuildingType().equals(BuildingType.PORT) && caseGauche.getActivationCount()>0) {
-					score+=3;
-				}
 			}
 		}
-		int cptSP = 0;
-		if(quartier1.contains(BuildingType.TOWN_HALL)){
-			cptSP++;
-		}
-		if(quartier2.contains(BuildingType.TOWN_HALL)){
-			cptSP++;
-		}
-		if(quartier3.contains(BuildingType.TOWN_HALL)){
-			cptSP++;
-		}
-		if(quartier4.contains(BuildingType.TOWN_HALL)){
-			cptSP++;
-		}
-		if(cptSP==1){
-			score+=2;
-		}
-		if(cptSP==2){
-			score+=5;
-		}
-		if(cptSP==3) {
-			score += 9;
-		}
-		if(cptSP==4){
-			score+=14;
-		}
-
-		this.setScore(score);
+		return score;
 	}
+
 
 	private int getHouseScore() {
 		int score = 0;
-
 		for (Tile tile : plate.getTiles()) { //Pas besoin de savoir le x ou le y ici, on veut juste savoir le nombre de stack de chaque maison
 			if (tile instanceof Building building && building.getBuildingType() == BuildingType.HOUSE) { //Si c'est une maison
 				score += switch (building.getStackCount()) { //Voir la fiche de score pour les habitations, page 5
@@ -186,7 +228,6 @@ public class Player {
 				};
 			}
 		}
-
 		return score;
 	}
 
