@@ -12,10 +12,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Player {
@@ -114,7 +110,7 @@ public class Player {
 		this.setScore(score);
 	}
 
-	private int getTownHallScore(){
+	public int getTownHallScore(){
 		int score = 0;
 		int cptTownHall = 0;
 		if(isQuartier(0,0)){
@@ -160,7 +156,7 @@ public class Player {
 		return false;
 	}
 
-	private int getFactoryScore(){
+	public int getFactoryScore(){
 		int score = 0;
 		for (int baseX = 0; baseX < plate.getWidth(); baseX++) {
 			for (int baseY = 0; baseY < plate.getHeight(); baseY++) {
@@ -206,7 +202,7 @@ public class Player {
 	}
 
 
-	private int getGardenScore() {
+	public int getGardenScore() {
 		int score = 0;
 		for (int baseX = 0; baseX < plate.getWidth(); baseX++) {
 			for (int baseY = 0; baseY < plate.getHeight(); baseY++) {
@@ -248,7 +244,7 @@ public class Player {
 	}
 
 
-	private int getHouseScore() {
+	public int getHouseScore() {
 		int score = 0;
 		for (Tile tile : plate.getTiles()) { //Pas besoin de savoir le x ou le y ici, on veut juste savoir le nombre de stack de chaque maison
 			if (tile instanceof Building building && building.getBuildingType() == BuildingType.HOUSE) { //Si c'est une maison
@@ -264,7 +260,7 @@ public class Player {
 		return score;
 	}
 
-	private int getPortScore() {
+	public int getPortScore() {
 		//On recherche la succession de port la plus longue, en ligne ou colonne
 
 		int longest = 0;
