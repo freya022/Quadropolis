@@ -138,10 +138,10 @@ public class Player {
 				int cptFactoryMarket = 0;
 				int cptFactoryPort = 0;
 				final Tile tile = plate.get(baseX, baseY);
-				final Tile tileUp = plate.get(baseX - 1, baseY);
-				final Tile tileDown = plate.get(baseX + 1, baseY);
-				final Tile tileRight = plate.get(baseX, baseY + 1);
-				final Tile tileLeft = plate.get(baseX, baseY - 1);
+				final Tile tileUp = plate.get(baseX,baseY+1);
+				final Tile tileDown = plate.get(baseX,baseY-1);
+				final Tile tileRight = plate.get(baseX+1, baseY);
+				final Tile tileLeft = plate.get(baseX-1, baseY);
 				if (tile instanceof Building building && building.getBuildingType() == BuildingType.GARDEN && ((Building) tile).getActivationCount()>0) {
 					if (tileUp instanceof Building buildingUp && buildingUp.getBuildingType() == BuildingType.BUSINESS && buildingUp.getActivationCount()>0) {
 						cptFactoryMarket++;
@@ -182,10 +182,10 @@ public class Player {
 		for (int baseX = 0; baseX < plate.getWidth(); baseX++) {
 			for (int baseY = 0; baseY < plate.getHeight(); baseY++) {
 				final Tile tile = plate.get(baseX, baseY);
-				final Tile tileUp = plate.get(baseX - 1, baseY);
-				final Tile tileDown = plate.get(baseX + 1, baseY);
-				final Tile tileRight = plate.get(baseX, baseY + 1);
-				final Tile tileLeft = plate.get(baseX, baseY - 1);
+				final Tile tileUp = plate.get(baseX,baseY+1);
+				final Tile tileDown = plate.get(baseX,baseY-1);
+				final Tile tileRight = plate.get(baseX+1, baseY);
+				final Tile tileLeft = plate.get(baseX-1, baseY);
 				int cptGarden = 0;
 				if (tile instanceof Building building && building.getBuildingType() == BuildingType.GARDEN) {
 					if (tileUp instanceof Building buildingUp && buildingUp.getBuildingType() == BuildingType.HOUSE && buildingUp.getActivationCount()>0) {
