@@ -5,52 +5,52 @@
 <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <VBox fx:id="playerBox" style="-fx-background-color: dbd6d0;" HBox.hgrow="ALWAYS">
       <ImageView fitHeight="60.0" fitWidth="100.0">
-         <Image url="@../media/quadroLogo/JoueurLogo.PNG" />
+         <Image url="@../media/quadroLogo/JoueurLogo.png" />
       </ImageView>
    </VBox>
    <VBox fx:id="houseBox" style="-fx-background-color: fefbc6;" HBox.hgrow="ALWAYS">
       <ImageView fitHeight="60.0" fitWidth="100.0">
-         <Image url="@../media/quadroLogo/homeLogo.PNG" />
+         <Image url="@../media/quadroLogo/homeLogo.png" />
       </ImageView>
    </VBox>
    <VBox fx:id="gardenBox" style="-fx-background-color: ecf2c4;" HBox.hgrow="ALWAYS">
       <ImageView fitHeight="60.0" fitWidth="100.0">
-         <Image url="@../media/quadroLogo/jardinLogo.PNG" />
+         <Image url="@../media/quadroLogo/jardinLogo.png" />
       </ImageView>
    </VBox>
    <VBox fx:id="businessBox" style="-fx-background-color: ddc4da;" HBox.hgrow="ALWAYS">
       <ImageView fitHeight="60.0" fitWidth="100.0">
-         <Image url="@../media/quadroLogo/marketLogo.PNG" />
+         <Image url="@../media/quadroLogo/marketLogo.png" />
       </ImageView>
    </VBox>
    <VBox fx:id="factoryBox" style="-fx-background-color: f9c6a9;" HBox.hgrow="ALWAYS">
       <ImageView fitHeight="60.0" fitWidth="100.0">
-         <Image url="@../media/quadroLogo/factoryLogo.PNG" />
+         <Image url="@../media/quadroLogo/factoryLogo.png" />
       </ImageView>
    </VBox>
    <VBox fx:id="townhallBox" style="-fx-background-color: d3e9e7;" HBox.hgrow="ALWAYS">
       <ImageView fitHeight="60.0" fitWidth="100.0">
-         <Image url="@../media/quadroLogo/hometownLogo.PNG" />
+         <Image url="@../media/quadroLogo/hometownLogo.png" />
       </ImageView>
    </VBox>
    <VBox fx:id="portBox" style="-fx-background-color: cce6f7;" HBox.hgrow="ALWAYS">
       <ImageView fitHeight="60.0" fitWidth="100.0">
-         <Image url="@../media/quadroLogo/portLogo.PNG" />
+         <Image url="@../media/quadroLogo/portLogo.png" />
       </ImageView>
    </VBox>
    <VBox fx:id="remainingPeopleBox" style="-fx-background-color: ead7c9;" HBox.hgrow="ALWAYS">
       <ImageView fitHeight="60.0" fitWidth="100.0">
-         <Image url="@../media/quadroLogo/remainingPeopleLogo.PNG" />
+         <Image url="@../media/quadroLogo/remainingPeopleLogo.png" />
       </ImageView>
    </VBox>
    <VBox fx:id="remainingGasBox" style="-fx-background-color: ead7c9;" HBox.hgrow="ALWAYS">
       <ImageView fitHeight="60.0" fitWidth="100.0">
-         <Image url="@../media/quadroLogo/remainingGasLogo.PNG" />
+         <Image url="@../media/quadroLogo/remainingGasLogo.png" />
       </ImageView>
    </VBox>
    <VBox fx:id="scoreBox" style="-fx-background-color: dbd6d0;" HBox.hgrow="ALWAYS">
       <ImageView fitHeight="60.0" fitWidth="100.0">
-         <Image url="@../media/quadroLogo/scoreLogo.PNG" />
+         <Image url="@../media/quadroLogo/scoreLogo.png" />
       </ImageView>
    </VBox>
 </HBox>

@@ -21,7 +21,7 @@ public class Urbanist extends Tile {
 	@Override
 	@NotNull
 	public Node asGraphic() {
-		final ImageView view = new ImageView(new Image(Utils.getResourceAsStream("/com/freya02/quadropolis/ui/media/urbanisteLogo.PNG")));
+		final ImageView view = new ImageView(new Image(Utils.getResourceAsStream("/com/freya02/quadropolis/ui/media/urbanisteLogo.png")));
 		view.setFitHeight(100);
 		view.setFitWidth(100);
 		view.setPreserveRatio(true);
