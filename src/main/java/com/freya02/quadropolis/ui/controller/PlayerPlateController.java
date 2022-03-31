@@ -91,13 +91,13 @@ public class PlayerPlateController {
 	private void updateTitle() {
 		final String step;
 		if (gameModel.isWaitingNextTurn()) {
-			step = "Attente du prochain tour / activez";
-		} else if (gameModel.canSelectArchitectProperty().get()) {
-			step = "Sélectionnez un architecte";
-		} else if (gameModel.canSelectArchitectCoordinatesProperty().get()) {
-			step = "Positionnez l'architecte";
+			step = "Attente du prochain tour";
 		} else if (gameModel.canSelectTargetTileProperty().get()) {
 			step = "Sélectionnez votre case cible";
+		} else if (gameModel.canSelectArchitectCoordinatesProperty().get()) {
+			step = "Positionnez l'architecte";
+		} else if (gameModel.canSelectArchitectProperty().get()) {
+			step = "Sélectionnez un architecte";
 		} else {
 			return;
 		}
@@ -176,12 +176,6 @@ public class PlayerPlateController {
 					player.getResources().barrelsProperty().addListener(o -> canBeActivatedProp.set(building.canBeActivated()));
 
 					stackPane.disableProperty().bind(gameModel.canSelectTargetTileProperty().not().and(canBeActivatedProp.not()));
-
-					if (!stackPane.isDisable()) {
-						System.out.println("can " + x + " " + y);
-						System.out.println("canBeActivatedProp = " + canBeActivatedProp);
-						System.out.println("gameModel.canSelectTargetTileProperty() = " + gameModel.canSelectTargetTileProperty());
-					}
 
 					final Node node = tile.asGraphic();
 					node.setOnMouseClicked(e -> onBuildingClick(building));
