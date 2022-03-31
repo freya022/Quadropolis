@@ -78,16 +78,13 @@ public class Building extends Tile {
 	}
 
 	public boolean canBeActivated() {
-		return canBeActivated && owner.getResources().has(activationCost);
+		return canBeActivated && owner.getResources().has(activationCost) && activationCount + 1 >= stackCount;
 	}
 
 	public void activate() {
 		checkOwner();
 
 		if (!canBeActivated())
-			throw new IllegalStateException();
-
-		if (activationCount + 1 > stackCount)
 			throw new IllegalStateException();
 
 		activationCount++;

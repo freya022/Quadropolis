@@ -7,13 +7,13 @@ public enum GameMode {
 	private final int playerPlateWidth;
 	private final int playerPlateHeight;
 	private final int maxRounds;
-	private final int architects;
+	private final int maxArchitects;
 
-	GameMode(int playerPlateWidth, int playerPlateHeight, int maxRounds, int architects) {
+	GameMode(int playerPlateWidth, int playerPlateHeight, int maxRounds, int maxArchitects) {
 		this.playerPlateWidth = playerPlateWidth;
 		this.playerPlateHeight = playerPlateHeight;
 		this.maxRounds = maxRounds;
-		this.architects = architects;
+		this.maxArchitects = maxArchitects;
 	}
 
 	public int getPlayerPlateWidth() {
@@ -28,7 +28,7 @@ public enum GameMode {
 		return maxRounds;
 	}
 
-	public int getArchitects() {
-		return architects;
+	public int getMaxArchitects() {
+		return maxArchitects;
 	}
 }

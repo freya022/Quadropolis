@@ -128,6 +128,8 @@ public class GlobalPlateController {
 	}
 
 	private void updatePlacedArchitect(StackPane stackPane, PlacedArchitectCoordinates architectCoordinates) {
+		stackPane.getChildren().clear();
+
 		for (PlacedArchitect placedArchitect : globalPlate.getPlacedArchitects()) {
 			if (architectCoordinates.equals(placedArchitect.getCoordinates())) {
 				final ImageView view = new ImageView(placedArchitect.getArchitect().asImage());
@@ -145,7 +147,6 @@ public class GlobalPlateController {
 		gameModel.setSelectedArchitectCoordinates(architectCoordinates);
 	}
 
-	//TODO fonctions séparées pour calculer sur le plateau 5x5 et corriger les cases du plateau global
 	@NotNull
 	private PlacedArchitectCoordinates getArchitectCoordinates(int x, int y) {
 		//Ici on reçoit les coordonnées entre 0x0 et 7x7 (plateau + cases architectes), on doit réduire la coordonnée clé qu'à la transformation

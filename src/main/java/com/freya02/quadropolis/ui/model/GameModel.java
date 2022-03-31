@@ -28,7 +28,7 @@ public class GameModel {
 
 		Quadropolis.getInstance().initGame(gameMode, maxPlayers);
 
-		canSelectArchitect.bind(waitingNextTurn.not().and(selectedArchitect.isNull())); //Si l'architecte n'est pas sélectionné alors on peut le faire
+		canSelectArchitect.bind(waitingNextTurn.not().and(selectedArchitectCoordinates.isNull())); //Si l'architecte n'est pas encore placé alors on peut le faire
 		canSelectArchitectCoordinates.bind(waitingNextTurn.not().and(selectedArchitect.isNotNull().and(selectedArchitectCoordinates.isNull()))); //Si l'architecte est sélectionné et que les coordonnées n'ont pas été sélectionnées
 		canSelectTargetTile.bind(waitingNextTurn.not().and(selectedArchitect.isNotNull().and(selectedArchitectCoordinates.isNotNull()))); //Si l'architecte et les coordonnées sont sélectionnées
 	}
@@ -104,16 +104,29 @@ public class GameModel {
 	public void nextPlayer() {
 		LOGGER.debug("Next player");
 
+		getCurrentPlayer().setTurn(getCurrentPlayer().getTurn() + 1);
+
 		final Quadropolis quadropolis = Quadropolis.getInstance();
 		final int currentPlayerNum = getCurrentPlayer().getPlayerNum();
+
 		if (currentPlayerNum == quadropolis.getMaxPlayers()) {
-			if (round.get() == gameMode.getMaxRounds()) {
-				LOGGER.info("Jeu terminé");
+			if (getCurrentPlayer().getTurn() == 5) { //Si c'est le dernier joueur qui à joué et que c'est son dernier tour alors on fait le round suivant
+				if (round.get() == gameMode.getMaxRounds()) {
+					LOGGER.info("Jeu terminé");
 
-				System.exit(0);
+					System.exit(0);
+				}
+
+				round.set(round.get() + 1);
+
+				for (Player player : quadropolis.getPlayers()) {
+					player.regenArchitects();
+
+					player.setTurn(1);
+
+					quadropolis.getGlobalPlate().getPlacedArchitects().clear();
+				}
 			}
-
-			round.set(round.get() + 1);
 
 			setCurrentPlayer(quadropolis.getPlayers().get(0));
 		} else {

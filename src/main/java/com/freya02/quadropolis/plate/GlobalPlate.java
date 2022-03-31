@@ -21,11 +21,26 @@ public class GlobalPlate extends Plate {
 		for (int x = 0; x < WIDTH; x++) {
 			for (int y = 0; y < HEIGHT; y++) {
 				final BuildingType[] buildingTypes = BuildingType.values();
+				final BuildingType buildingType = buildingTypes[random.nextInt(buildingTypes.length)];
 
-				set(x, y, new Building(buildingTypes[random.nextInt(buildingTypes.length)],
-						new Resources(1, 1),
-						true,
-						new Resources(2, 2)));
+				final Resources activationCost = switch (buildingType) {
+					case HOUSE, BUSINESS -> new Resources(0, 1);
+					case GARDEN -> new Resources(0, 0);
+					case TOWN_HALL, PORT, FACTORY -> new Resources(1, 0);
+				};
+
+				final Resources revenue = switch (buildingType) {
+					case HOUSE -> new Resources(1, 0);
+					case GARDEN, TOWN_HALL, BUSINESS, PORT -> new Resources(0, 0);
+					case FACTORY -> new Resources(0, 1);
+				};
+
+				final boolean canBeActivated = buildingType != BuildingType.GARDEN;
+
+				set(x, y, new Building(buildingType,
+						activationCost,
+						canBeActivated,
+						revenue));
 			}
 		}
 	}
@@ -39,11 +54,15 @@ public class GlobalPlate extends Plate {
 		if (placedArchitects.stream().anyMatch(p -> p.getCoordinates().equals(architectCoordinates))) {
 			return false;
 		} else {
+			final TileCoordinates tileCoordinates = architectCoordinates.toTileCoordinates(this, architect);
+
+			if (get(tileCoordinates) == null) { //Il n'y rien à cette case !
+				return false;
+			}
+
 			// On cherche à savoir si un urbaniste nous empêche de claim une case
 			// L'urbaniste représente juste la coordonnée X et la coordonnée Y à éviter
 			// On calcule la coordonnée de la case ciblée par l'architecte et on vérifie si elle partage une coordonnée avec l'urbaniste
-
-			final TileCoordinates tileCoordinates = architectCoordinates.toTileCoordinates(this, architect);
 
 			for (int x = 0; x < getWidth(); x++) {
 				for (int y = 0; y < getHeight(); y++) {
@@ -81,13 +100,13 @@ public class GlobalPlate extends Plate {
 		urbanist.setCoords(tileCoordinates);
 
 		if (tile instanceof Building building) {
-			player.getPlate().addBuilding(targetCoordinates, building);
-
 			building.setOwner(player);
 
 			building.getRevenue().copyTo(player.getResources());
 
 			player.getArchitects().remove(architect);
+
+			player.getPlate().addBuilding(targetCoordinates, building);
 
 			return building;
 		} else {
