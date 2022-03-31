@@ -8,6 +8,7 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.util.List;
 import java.util.stream.IntStream;
 
 public class Player {
@@ -19,17 +20,23 @@ public class Player {
 	private final ObservableList<Architect> architects;
 
 	private final PlayerPlate plate;
+	private final GameMode gameMode;
 	private final int playerNum;
 
+	private final IntegerProperty turn = new SimpleIntegerProperty(1);
+
 	public Player(GameMode gameMode, int playerNum) {
+		this.gameMode = gameMode;
 		this.playerNum = playerNum;
 		this.plate = new PlayerPlate(gameMode);
 
-		this.architects = FXCollections.observableArrayList(
-				IntStream.range(0, gameMode.getMaxArchitects())
-						.mapToObj(reach -> new Architect(this, gameMode, reach))
-						.toList()
-		);
+		this.architects = FXCollections.observableArrayList(retrieveArchitects());
+	}
+
+	private List<Architect> retrieveArchitects() {
+		return IntStream.range(0, gameMode.getMaxArchitects())
+				.mapToObj(reach -> new Architect(this, gameMode, reach))
+				.toList();
 	}
 
 	public int getPlayerNum() {
@@ -64,8 +71,24 @@ public class Player {
 		return plate;
 	}
 
+	public int getTurn() {
+		return turn.get();
+	}
+
+	public IntegerProperty turnProperty() {
+		return turn;
+	}
+
+	public void setTurn(int turn) {
+		this.turn.set(turn);
+	}
+
 	@Override
 	public String toString() {
 		return "Player{playerNum=%d}".formatted(playerNum);
+	}
+
+	public void regenArchitects() {
+		architects.setAll(retrieveArchitects());
 	}
 }

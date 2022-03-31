@@ -6,6 +6,7 @@ import com.freya02.quadropolis.plate.PlayerPlate;
 import com.freya02.quadropolis.plate.Tile;
 import com.freya02.quadropolis.ui.model.GameModel;
 import javafx.beans.InvalidationListener;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
@@ -27,7 +28,7 @@ public class PlayerPlateController {
 	private final GameModel gameModel;
 	private final Player player;
 
-	@FXML private Label titleLabel, stepLabel, houseLabel, barrelLabel;
+	@FXML private Label titleLabel, turnLabel, stepLabel, houseLabel, barrelLabel;
 	@FXML private VBox vbox;
 	@FXML private TilePane architectsBox;
 	@FXML private Button nextPlayerButton;
@@ -40,6 +41,8 @@ public class PlayerPlateController {
 	@FXML
 	private void initialize() {
 		updateTitle();
+
+		turnLabel.textProperty().bind(new SimpleStringProperty("Tour ").concat(player.turnProperty()));
 
 		nextPlayerButton.disableProperty().bind(gameModel.waitingNextTurnProperty().not());
 
