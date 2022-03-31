@@ -65,48 +65,15 @@ public class Player {
 	public void calculScore() {
 		int score = 0;
 
-		//Vu qu'on est dans l'objet joueur, on a déjà son plateau, pas besoin de la récupérer dans Quadropolis
 		score += getHouseScore();
-		//...
-
 		score += getPortScore();
-
 		score += getGardenScore();
-
 		score += getFactoryScore();
-
 		score += getTownHallScore();
-
+		score += getBusinessScore();
 		score -= getResources().getBarrels();
-
 		score -= getResources().getHouses();
 
-		//TODO remplacer le reste des calculs par des fonctions individuelles
-
-		//PlayerPlate PP = getPlate();
-		//for (int i = 0; i < 4; i++) {
-		//	for (int j = 0; j < 4; j++) {
-		//		Building b = (Building) PP.get(i, j);
-		//		Building caseHaut = (Building) PP.tryGet(i - 1, j);
-		//		Building caseBas = (Building) PP.tryGet(i + 1, j);
-		//		Building caseDroite = (Building) PP.tryGet(i, j + 1);
-		//		Building caseGauche = (Building) PP.tryGet(i, j - 1);
-		//		if (b.getBuildingType().equals(BuildingType.BUSINESS) && b.getActivationCount() > 0) {
-		//			if (b.getActivationCount() == 1) {
-		//				score++;
-		//			}
-		//			if (b.getActivationCount() == 2) {
-		//				score += 2;
-		//			}
-		//			if (b.getActivationCount() == 3) {
-		//				score += 4;
-		//			}
-		//			if (b.getActivationCount() == 4) {
-		//				score += 7;
-		//			}
-		//		}
-		//	}
-		//}
 		this.setScore(score);
 	}
 
@@ -141,12 +108,11 @@ public class Player {
 	}
 
 	private boolean isQuartier(int x, int y) {
-		final List<Tile> list = List.of(
-				plate.get(x, y),
-				plate.get(x + 1, y),
-				plate.get(x, y + 1),
-				plate.get(x + 1, y + 1)
-		);
+		final List<Tile> list = new ArrayList<>();
+		list.add(plate.get(x, y));
+		list.add(plate.get(x + 1, y));
+		list.add(plate.get(x, y + 1));
+		list.add(plate.get(x + 1, y + 1));
 
 		for (Tile tile : list) {
 			if (tile instanceof Building) {

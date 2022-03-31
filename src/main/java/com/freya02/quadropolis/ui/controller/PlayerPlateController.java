@@ -108,7 +108,7 @@ public class PlayerPlateController {
 	}
 
 	private void onTileClick(int x, int y) {
-		if (gameModel.canSelectTargetTileProperty().get()) {
+		if (gameModel.canSelectTargetTileProperty().get() && player.getPlate().get(x, y) == null) {
 			LOGGER.debug("Click player tile (final step)");
 			LOGGER.trace("Current player: {}", gameModel.getCurrentPlayer());
 			LOGGER.trace("Selected architect reach: {}", gameModel.getSelectedArchitect().getReach());

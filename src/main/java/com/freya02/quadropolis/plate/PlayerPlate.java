@@ -12,7 +12,6 @@ public class PlayerPlate extends Plate {
 		final Tile currentTile = get(targetCoordinates);
 
 		//On vérifie si leur joueur à déjà un bâtiment a ces coordonnées
-		//TODO on doit vérifier si c'est le même type de batiment avec les mêmes resources ?
 		if (currentTile == null) {
 			set(targetCoordinates, building);
 		} else {

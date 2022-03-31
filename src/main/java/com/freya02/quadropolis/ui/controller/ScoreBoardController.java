@@ -16,6 +16,8 @@ public class ScoreBoardController {
 	@FXML
 	private void initialize() {
 		for (Player player : Quadropolis.getInstance().getPlayers()) {
+			player.calculScore();
+
 			playerBox.getChildren().add(getLabel(player.getPlayerNum()));
 
 			businessBox.getChildren().add(getLabel(player.getBusinessScore()));
@@ -28,6 +30,8 @@ public class ScoreBoardController {
 			remainingPeopleBox.getChildren().add(getLabel(-player.getResources().getHouses()));
 
 			townhallBox.getChildren().add(getLabel(player.getTownHallScore()));
+
+			scoreBox.getChildren().add(getLabel(player.getScore()));
 		}
 	}
 
