@@ -243,6 +243,24 @@ public class Player {
 		return score;
 	}
 
+	public int getBusinessScore() {
+		int score = 0;
+
+		for (Tile tile : plate.getTiles()) { //Pas besoin de savoir le x ou le y ici, on veut juste savoir le nombre de stack de chaque maison
+			if (tile instanceof Building building && building.getBuildingType() == BuildingType.BUSINESS) { //Si c'est un commerce
+				score += switch (building.getActivationCount()) { //Voir la fiche de score pour les commerces, page 5
+					case 0 -> 0;
+					case 1 -> 1;
+					case 2 -> 2;
+					case 3 -> 4;
+					case 4 -> 7;
+					default -> throw new IllegalArgumentException("A business has more than 4 people"); //Au cas où
+				};
+			}
+		}
+
+		return score;
+	}
 
 	public int getHouseScore() {
 		int score = 0;
