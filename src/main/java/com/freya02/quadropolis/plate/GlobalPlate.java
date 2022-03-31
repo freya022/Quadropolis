@@ -100,13 +100,13 @@ public class GlobalPlate extends Plate {
 		urbanist.setCoords(tileCoordinates);
 
 		if (tile instanceof Building building) {
-			player.getPlate().addBuilding(targetCoordinates, building);
-
 			building.setOwner(player);
 
 			building.getRevenue().copyTo(player.getResources());
 
 			player.getArchitects().remove(architect);
+
+			player.getPlate().addBuilding(targetCoordinates, building);
 
 			return building;
 		} else {

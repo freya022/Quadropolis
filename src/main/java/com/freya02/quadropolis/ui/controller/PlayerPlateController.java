@@ -1,11 +1,13 @@
 package com.freya02.quadropolis.ui.controller;
 
 import com.freya02.quadropolis.*;
+import com.freya02.quadropolis.plate.Building;
 import com.freya02.quadropolis.plate.GlobalPlate;
 import com.freya02.quadropolis.plate.PlayerPlate;
 import com.freya02.quadropolis.plate.Tile;
 import com.freya02.quadropolis.ui.model.GameModel;
 import javafx.beans.InvalidationListener;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -68,6 +70,7 @@ public class PlayerPlateController {
 			for (int x = 0; x < playerPlate.getWidth(); x++) {
 				final StackPane stackPane = new StackPane();
 
+				stackPane.setCursor(Cursor.HAND);
 				stackPane.setPrefSize(100, 100);
 				stackPane.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
 				stackPane.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
@@ -76,7 +79,6 @@ public class PlayerPlateController {
 				int finalX = x;
 				int finalY = y;
 
-				stackPane.disableProperty().bind(gameModel.canSelectTargetTileProperty().not());
 				stackPane.setOnMouseClicked(e -> onTileClick(finalX, finalY));
 
 				hbox.getChildren().add(stackPane);
@@ -89,7 +91,7 @@ public class PlayerPlateController {
 	private void updateTitle() {
 		final String step;
 		if (gameModel.isWaitingNextTurn()) {
-			step = "Attente du prochain tour";
+			step = "Attente du prochain tour / activez";
 		} else if (gameModel.canSelectArchitectProperty().get()) {
 			step = "Sélectionnez un architecte";
 		} else if (gameModel.canSelectArchitectCoordinatesProperty().get()) {
@@ -105,18 +107,26 @@ public class PlayerPlateController {
 	}
 
 	private void onTileClick(int x, int y) {
-		LOGGER.debug("Click player tile (final step)");
-		LOGGER.trace("Current player: {}", gameModel.getCurrentPlayer());
-		LOGGER.trace("Selected architect reach: {}", gameModel.getSelectedArchitect().getReach());
-		LOGGER.trace("Selected architect coordinates: {}", gameModel.getSelectedArchitectCoordinates());
-		LOGGER.trace("Target coordinates: {}", new TileCoordinates(x, y));
+		if (gameModel.canSelectTargetTileProperty().get()) {
+			LOGGER.debug("Click player tile (final step)");
+			LOGGER.trace("Current player: {}", gameModel.getCurrentPlayer());
+			LOGGER.trace("Selected architect reach: {}", gameModel.getSelectedArchitect().getReach());
+			LOGGER.trace("Selected architect coordinates: {}", gameModel.getSelectedArchitectCoordinates());
+			LOGGER.trace("Target coordinates: {}", new TileCoordinates(x, y));
 
-		globalPlate.claimBuilding(gameModel.getCurrentPlayer(),
-				gameModel.getSelectedArchitect(),
-				gameModel.getSelectedArchitectCoordinates(),
-				new TileCoordinates(x, y));
+			globalPlate.claimBuilding(gameModel.getCurrentPlayer(),
+					gameModel.getSelectedArchitect(),
+					gameModel.getSelectedArchitectCoordinates(),
+					new TileCoordinates(x, y));
 
-		gameModel.prepareNextTurn();
+			gameModel.prepareNextTurn();
+		}
+	}
+
+	private void onBuildingClick(Building building) {
+		if (building.canBeActivated()) {
+			building.activate();
+		}
 	}
 
 	@FXML
@@ -157,11 +167,26 @@ public class PlayerPlateController {
 			for (int x = 0; x < plate.getWidth(); x++) {
 				for (int y = 0; y < plate.getHeight(); y++) {
 					final Tile tile = plate.get(x, y);
-					if (tile == null) continue;
+					if (!(tile instanceof Building building)) continue;
 
 					final StackPane stackPane = getStackPane(x, y);
 
-					stackPane.getChildren().setAll(tile.asGraphic());
+					final SimpleBooleanProperty canBeActivatedProp = new SimpleBooleanProperty(building.canBeActivated());
+					player.getResources().housesProperty().addListener(o -> canBeActivatedProp.set(building.canBeActivated()));
+					player.getResources().barrelsProperty().addListener(o -> canBeActivatedProp.set(building.canBeActivated()));
+
+					stackPane.disableProperty().bind(gameModel.canSelectTargetTileProperty().not().and(canBeActivatedProp.not()));
+
+					if (!stackPane.isDisable()) {
+						System.out.println("can " + x + " " + y);
+						System.out.println("canBeActivatedProp = " + canBeActivatedProp);
+						System.out.println("gameModel.canSelectTargetTileProperty() = " + gameModel.canSelectTargetTileProperty());
+					}
+
+					final Node node = tile.asGraphic();
+					node.setOnMouseClicked(e -> onBuildingClick(building));
+
+					stackPane.getChildren().setAll(node);
 				}
 			}
 		} catch (Exception e) {

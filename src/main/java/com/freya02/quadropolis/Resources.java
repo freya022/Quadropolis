@@ -64,7 +64,7 @@ public class Resources {
 	}
 
 	public boolean has(Resources resources) {
-		return getHouses() > resources.getHouses()
-				&& getBarrels() > resources.getBarrels();
+		return getHouses() >= resources.getHouses()
+				&& getBarrels() >= resources.getBarrels();
 	}
 }
