@@ -35,9 +35,11 @@ public class GlobalPlate extends Plate {
 					case FACTORY -> new Resources(0, 1);
 				};
 
+				final boolean canBeActivated = buildingType != BuildingType.GARDEN;
+
 				set(x, y, new Building(buildingType,
 						activationCost,
-						true,
+						canBeActivated,
 						revenue));
 			}
 		}
