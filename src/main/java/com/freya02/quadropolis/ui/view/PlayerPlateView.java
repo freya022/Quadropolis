@@ -30,6 +30,10 @@ public class PlayerPlateView {
 		stage = Utils.newStage();
 
 		stage.show();
+
+		gameModel.finishedProperty().addListener((a, b, isFinished) -> {
+			if (isFinished) stage.close();
+		});
 	}
 
 	private void onPlayerChange(Player player) {

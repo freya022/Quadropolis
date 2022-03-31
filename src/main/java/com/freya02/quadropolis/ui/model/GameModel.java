@@ -1,6 +1,7 @@
 package com.freya02.quadropolis.ui.model;
 
 import com.freya02.quadropolis.*;
+import com.freya02.quadropolis.ui.view.ScoreBoardView;
 import javafx.beans.property.*;
 import org.slf4j.Logger;
 
@@ -21,6 +22,8 @@ public class GameModel {
 	private final BooleanProperty canSelectArchitectCoordinates = new SimpleBooleanProperty();
 	private final BooleanProperty canSelectTargetTile = new SimpleBooleanProperty();
 
+	private final BooleanProperty finished = new SimpleBooleanProperty();
+
 	private final GameMode gameMode;
 
 	public GameModel(GameMode gameMode, int maxPlayers) {
@@ -31,6 +34,10 @@ public class GameModel {
 		canSelectArchitect.bind(waitingNextTurn.not().and(selectedArchitectCoordinates.isNull())); //Si l'architecte n'est pas encore placé alors on peut le faire
 		canSelectArchitectCoordinates.bind(waitingNextTurn.not().and(selectedArchitect.isNotNull().and(selectedArchitectCoordinates.isNull()))); //Si l'architecte est sélectionné et que les coordonnées n'ont pas été sélectionnées
 		canSelectTargetTile.bind(waitingNextTurn.not().and(selectedArchitect.isNotNull().and(selectedArchitectCoordinates.isNotNull()))); //Si l'architecte et les coordonnées sont sélectionnées
+	}
+
+	public BooleanProperty finishedProperty() {
+		return finished;
 	}
 
 	public GameMode getGameMode() {
@@ -114,7 +121,9 @@ public class GameModel {
 				if (round.get() == gameMode.getMaxRounds()) {
 					LOGGER.info("Jeu terminé");
 
-					System.exit(0);
+					finished.set(true);
+
+					new ScoreBoardView();
 				}
 
 				round.set(round.get() + 1);
