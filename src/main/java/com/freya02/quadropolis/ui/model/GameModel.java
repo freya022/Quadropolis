@@ -128,6 +128,8 @@ public class GameModel {
 
 				round.set(round.get() + 1);
 
+				quadropolis.getGlobalPlate().placeBuildings();
+
 				for (Player player : quadropolis.getPlayers()) {
 					player.regenArchitects();
 

@@ -20,6 +20,12 @@ public abstract class Plate {
 
 		tiles = FXCollections.observableArrayList();
 
+		nullFill();
+	}
+
+	protected void nullFill() {
+		tiles.clear();
+
 		for (int i = 0; i < width * height; i++) {
 			tiles.add(null);
 		}
