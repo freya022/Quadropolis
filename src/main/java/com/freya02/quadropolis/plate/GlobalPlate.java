@@ -21,11 +21,24 @@ public class GlobalPlate extends Plate {
 		for (int x = 0; x < WIDTH; x++) {
 			for (int y = 0; y < HEIGHT; y++) {
 				final BuildingType[] buildingTypes = BuildingType.values();
+				final BuildingType buildingType = buildingTypes[random.nextInt(buildingTypes.length)];
 
-				set(x, y, new Building(buildingTypes[random.nextInt(buildingTypes.length)],
-						new Resources(1, 1),
+				final Resources activationCost = switch (buildingType) {
+					case HOUSE, BUSINESS -> new Resources(0, 1);
+					case GARDEN -> new Resources(0, 0);
+					case TOWN_HALL, PORT, FACTORY -> new Resources(1, 0);
+				};
+
+				final Resources revenue = switch (buildingType) {
+					case HOUSE -> new Resources(1, 0);
+					case GARDEN, TOWN_HALL, BUSINESS, PORT -> new Resources(0, 0);
+					case FACTORY -> new Resources(0, 1);
+				};
+
+				set(x, y, new Building(buildingType,
+						activationCost,
 						true,
-						new Resources(2, 2)));
+						revenue));
 			}
 		}
 	}
