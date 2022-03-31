@@ -13,10 +13,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.TilePane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
@@ -59,17 +56,30 @@ public class PlayerPlateController {
 		updateArchitects();
 		updatePlate();
 
+		vbox.getChildren().clear();
+
 		final PlayerPlate playerPlate = player.getPlate();
-		for (int x = 0; x < playerPlate.getWidth(); x++) {
-			for (int y = 0; y < playerPlate.getHeight(); y++) {
-				final StackPane stackPane = getStackPane(x, y);
+		for (int y = 0; y < playerPlate.getHeight(); y++) {
+			final HBox hbox = new HBox(10);
+
+			for (int x = 0; x < playerPlate.getWidth(); x++) {
+				final StackPane stackPane = new StackPane();
+
+				stackPane.setPrefSize(100, 100);
+				stackPane.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+				stackPane.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+				stackPane.getStyleClass().add("visibleTile");
 
 				int finalX = x;
 				int finalY = y;
 
 				stackPane.disableProperty().bind(gameModel.canSelectTargetTileProperty().not());
 				stackPane.setOnMouseClicked(e -> onTileClick(finalX, finalY));
+
+				hbox.getChildren().add(stackPane);
 			}
+
+			vbox.getChildren().add(hbox);
 		}
 	}
 
