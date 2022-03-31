@@ -11,6 +11,7 @@
 .back {
     -fx-background-image: url("../media/background.png");
     -fx-background-repeat: stretch;
+    -fx-background-size: auto 100%;
 }
 
 Button {
