@@ -1,12 +1,12 @@
 package com.freya02.quadropolis.plate;
 
 public enum BuildingType {
-	HOUSE("house.PNG"),
-	GARDEN("garden.PNG"),
-	TOWN_HALL("townhall.PNG"),
-	BUSINESS("business.PNG"),
-	PORT("port.PNG"),
-	FACTORY("factory.PNG");
+	HOUSE("house.png"),
+	GARDEN("garden.png"),
+	TOWN_HALL("townhall.png"),
+	BUSINESS("business.png"),
+	PORT("port.png"),
+	FACTORY("factory.png");
 
 	private final String fileName;
 

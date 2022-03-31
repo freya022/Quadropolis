@@ -53,7 +53,7 @@
                            <children>
                               <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../media/gainBaril.PNG" />
+                                    <Image url="@../media/gainBaril.png" />
                                  </image>
                               </ImageView>
                               <Label fx:id="barrelLabel" text="0" textFill="WHITE">

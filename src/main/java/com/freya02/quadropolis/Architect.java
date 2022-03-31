@@ -28,9 +28,9 @@ public class Architect {
 		final String url;
 
 		if (gameMode == GameMode.CLASSIC) {
-			url = String.format("/com/freya02/quadropolis/ui/media/architects/architecte_%d_%d.PNG", player.getPlayerNum(), reach + 1); //Reach starts at 0, should start at 1 for the resource
+			url = String.format("/com/freya02/quadropolis/ui/media/architects/architecte_%d_%d.png", player.getPlayerNum(), reach + 1); //Reach starts at 0, should start at 1 for the resource
 		} else {
-			url = String.format("/com/freya02/quadropolis/ui/media/architects/architecte_expert_%d.PNG", reach + 1);
+			url = String.format("/com/freya02/quadropolis/ui/media/architects/architecte_expert_%d.png", reach + 1);
 		}
 
 		return new Image(Utils.getResourceAsStream(url));
