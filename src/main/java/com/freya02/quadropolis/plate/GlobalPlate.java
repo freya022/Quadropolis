@@ -39,11 +39,15 @@ public class GlobalPlate extends Plate {
 		if (placedArchitects.stream().anyMatch(p -> p.getCoordinates().equals(architectCoordinates))) {
 			return false;
 		} else {
+			final TileCoordinates tileCoordinates = architectCoordinates.toTileCoordinates(this, architect);
+
+			if (get(tileCoordinates) == null) { //Il n'y rien à cette case !
+				return false;
+			}
+
 			// On cherche à savoir si un urbaniste nous empêche de claim une case
 			// L'urbaniste représente juste la coordonnée X et la coordonnée Y à éviter
 			// On calcule la coordonnée de la case ciblée par l'architecte et on vérifie si elle partage une coordonnée avec l'urbaniste
-
-			final TileCoordinates tileCoordinates = architectCoordinates.toTileCoordinates(this, architect);
 
 			for (int x = 0; x < getWidth(); x++) {
 				for (int y = 0; y < getHeight(); y++) {
